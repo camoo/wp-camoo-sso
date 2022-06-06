@@ -217,3 +217,7 @@ body.camoo-sso-assistent  section, body.camoo-sso-assistent  div, body.camoo-sso
 .assistant-card .card-content .card-content-inner {
     padding: 0 50px;
 }
+
+body.login:before {
+    z-index: 0 !important;
+}
