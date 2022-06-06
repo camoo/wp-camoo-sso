@@ -164,9 +164,8 @@ body.camoo-sso-assistent  section, body.camoo-sso-assistent  div, body.camoo-sso
 }
 
 .assistant-card .card-bg.card-weave-medium {
-    background-image: url(/wp-content/plugins/jwt-single-sign-on/assets/images/Selection_172.png);
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjI0MyIgdmlld0JveD0iMCAwIDE0MDMgMzQwLjI1Ij4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIHN0eWxlPSJmaWxsOiMwMGFjZDc7IGZpbGwtb3BhY2l0eTouMSIgZD0iTTAsMFYzNDBzMjkuNzA1LDUuOTk0LDc3LTM5UzIwMS41NDEsMTgxLjgzOSwzMTEsMTgyczI1MS40MzcsNC4wNTksMzYyLTUyLDExNy4xODMtMjcuMjE4LDE1NC0yMiw2MS43OTQtNC44MTMsMTAxLTE4LDEwNC4yMy0xMS43ODIsMTU1LDIyLDc2LjksNTEuODgyLDEyNyw1NSw3Ni43OCwxLjA3LDEyMCw2MywxOC42NCwxMDEuNzA5LDczLDExMFYwSDBaIi8+Cjwvc3ZnPgo=);
 }
-
 
 .assistant-card .card-bg.card-weave-medium {
     background-repeat: repeat-x;
@@ -179,10 +178,8 @@ body.camoo-sso-assistent  section, body.camoo-sso-assistent  div, body.camoo-sso
 }
 
 .assistant-card .card-bg.card-weave-light {
-
-    background-image: url(/wp-content/plugins/jwt-single-sign-on/assets/images/Selection_172.png);
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjE4OSIgdmlld0JveD0iMCAwIDE0MDMgMjYzLjA5NCI+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBzdHlsZT0iZmlsbDojMDBhY2Q3OyBmaWxsLW9wYWNpdHk6LjA1IiBkPSJNMCwwVjI2M3M1My42LDUuMDQ0LDEzMS01OSwxMTQuNzc0LTUyLjAzMywyNTUtMjIsMTg5LjMyMSwxOC44LDMwMy02NSwyMjMuNzA4LTE5LjU0MiwyNjEtMiwxMDYuMjIsMzYuMTQxLDE0NSwxNCw3OC45NS0xMy4zLDEyOCwzNSwxMDMuMTIsOTMuMjMxLDE4MCw5OVYwSDBaIi8+Cjwvc3ZnPgo=);
 }
-
 
 .assistant-card .card-bg.card-weave-light {
     background-repeat: repeat-x;

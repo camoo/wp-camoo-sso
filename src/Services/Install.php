@@ -40,6 +40,9 @@ final class Install
         $this->option->delete('wp_notification_new_wp_version');
 
         $options = $this->option->get();
+        if (empty($options)) {
+            $options = [];
+        }
         foreach ($this->default_settings as $key => $value) {
             if (!array_key_exists($key, $options)) {
                 $options[$key] = $value;

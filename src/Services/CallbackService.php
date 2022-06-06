@@ -116,20 +116,20 @@ class CallbackService
         }
         $loginUser = [
             'ID' => $user->ID,
-            'display_name' => $user_info->user_name,
-            'nickname' => $user_info->user_name,
-            'first_name' => $user_info->first_name,
-            'last_name' => $user_info->last_name,
+            'display_name' => sanitize_text_field($user_info->user_email),
+            'nickname' => sanitize_text_field($user_info->user_email),
+            'first_name' => sanitize_text_field($user_info->first_name),
+            'last_name' => sanitize_text_field($user_info->last_name),
         ];
         if (!$isNew) {
-            $loginUser['user_email'] = $user_info->user_email;
+            $loginUser['user_email'] = sanitize_text_field($user_info->user_email);
         }
         wp_update_user($loginUser);
 
-        if (!$syncRoles) {
+        if ($syncRoles) {
             $user->set_role('');
             foreach ($roles as $role) {
-                $user->add_role($role);
+                $user->add_role(sanitize_text_field($role));
             }
         }
 

@@ -55,7 +55,6 @@ class AdminController
 
     public function admin_head(): void
     {
-
         wp_enqueue_style('camoo-sso-jquery-ui');
         wp_enqueue_script('jquery-ui-accordion');
 
