@@ -13,6 +13,5 @@
  */
 defined('WP_UNINSTALL_PLUGIN') || exit;
 
-global $wpdb;
-
 delete_option('wp_camoo_sso_options');
+delete_option('wp_camoo_sso_db_version');

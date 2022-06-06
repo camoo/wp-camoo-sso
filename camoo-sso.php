@@ -1,7 +1,7 @@
 <?php
+
 declare(strict_types=1);
 /**
- *
  * Plugin Name: CAMOO SSO
  * Plugin URI:  https://github.com/camoo/wp-camoo-sso
  * Description: Camoo.Hosting Automatic SSO Integration
@@ -19,9 +19,11 @@ declare(strict_types=1);
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-if (! defined('ABSPATH')) {
+use WP_CAMOO\SSO\Bootstrap;
+
+if (!defined('ABSPATH')) {
     die('Invalid request.');
 }
 
 require_once plugin_dir_path(__FILE__) . 'src/Bootstrap.php';
-(new \WP_CAMOO\SSO\Bootstrap)->initialize();
+(new Bootstrap())->initialize();

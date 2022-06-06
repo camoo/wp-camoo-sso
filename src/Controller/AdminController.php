@@ -25,20 +25,22 @@ class AdminController
         return new self();
     }
 
-    public function initialize()
+    public function initialize(): void
     {
         add_action('admin_init', [new self(), 'admin_init']);
         add_action('admin_menu', [new self(), 'add_page']);
     }
 
-    public function admin_init()
+    public function admin_init(): void
     {
         register_setting(Option::MAIN_SETTING_KEY, $this->option_name, [$this, 'validate']);
     }
 
-    public function add_page()
+    public function add_page(): void
     {
-        //if(current_user_can('camoo_sso')) {
+        if (!current_user_can('camoo_sso')) {
+            return;
+        }
         add_options_page(
             __('Single Sign On', Bootstrap::DOMAIN_TEXT),
             __('Single Sign On', Bootstrap::DOMAIN_TEXT),
@@ -51,7 +53,7 @@ class AdminController
         );
     }
 
-    public function admin_head()
+    public function admin_head(): void
     {
 
         // Jquery Accordion
@@ -62,12 +64,12 @@ class AdminController
         wp_enqueue_script('camoo-sso-admin');
     }
 
-    public function options_do_page()
+    public function options_do_page(): void
     {
         $options = $this->option->get();
         $this->admin_head(); ?>
         <div class="wrap">
-            <h2>Single Sign On Configuration</h2>
+            <h2><?php echo __('Single Sign On Configuration', Bootstrap::DOMAIN_TEXT)?></h2>
             <p>
                 When activated, this plugin adds a Single Sign On button to the login screen.
                 <br/>
@@ -78,7 +80,7 @@ class AdminController
             </p>
             <br />
             <div>
-                <h3 id="camoo-sso-configuration">Camoo.Hosting SSO Settings</h3>
+                <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', Bootstrap::DOMAIN_TEXT)?></h3>
                 <div>
                     <form method="post" action="options.php">
                         <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
@@ -87,7 +89,7 @@ class AdminController
 
 
                             <tr valign="top">
-                                <th scope="row">Client Identifier</th>
+                                <th scope="row"><?php echo __('Client Identifier', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
                                     <input type="text" name="<?php echo $this->option_name ?>[client_id]"
                                            value="<?php echo $options['client_id'] ?? ''; ?>"/>
@@ -96,15 +98,15 @@ class AdminController
 
 
                             <tr valign="top">
-                                <th scope="row">Append clientId to JWT Server</th>
+                                <th scope="row"><?php echo __('Redirect t o dashboard after login', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
-                                    <input type="checkbox" name="<?php echo $this->option_name ?>[append_client_id]"
-                                           value="1" <?php echo !empty($options['show_sso_button_login_page']) && $options['append_client_id'] == 1 ? 'checked="checked"' : ''; ?> />
+                                    <input type="checkbox" name="<?php echo $this->option_name ?>[redirect_to_dashboard]"
+                                           value="1" <?php echo !empty($options['redirect_to_dashboard']) && $options['redirect_to_dashboard'] == 1 ? 'checked="checked"' : ''; ?> />
                                 </td>
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row">Sync roles with external system</th>
+                                <th scope="row"><?php echo __('Sync roles with Camoo', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
                                     <input type="checkbox" name="<?php echo $this->option_name ?>[sync_roles]"
                                            value="1" <?php echo !empty($options['show_sso_button_login_page']) && $options['sync_roles'] == 1 ? 'checked="checked"' : ''; ?> />
@@ -112,7 +114,7 @@ class AdminController
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row">Show SSO button on login page</th>
+                                <th scope="row"><?php echo __('Show SSO button on login page', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
                                     <input type="checkbox" name="<?php echo $this->option_name ?>[show_sso_button_login_page]"
                                            value="1" <?php echo !empty($options['show_sso_button_login_page']) && $options['show_sso_button_login_page'] == 1 ? 'checked="checked"' : ''; ?> />

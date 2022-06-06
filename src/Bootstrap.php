@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WP_CAMOO\SSO;
@@ -41,7 +42,7 @@ final class Bootstrap
             $all_plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = sprintf(
                 __(
                     'Camoo.Hosting SSO for WordPress. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
-                    'camoo-sso'
+                    Bootstrap::DOMAIN_TEXT
                 ),
                 WP_CAMOO_SSO_SITE . '/wordpress-hosting'
             );
@@ -57,19 +58,19 @@ final class Bootstrap
             ?>
             <p style="text-align: center;
     text-transform: uppercase;
-    position: relative;" class="sso-login-or"><span>Or</span></p>
+    position: relative;" class="sso-login-or"><span><?php echo __('OR', Bootstrap::DOMAIN_TEXT) ?></span></p>
             <p style="padding-bottom: 1px;
     margin: 20px auto;
     text-align: center;">
                 <a style="color:#FFF; width:100%; text-align:center; margin-bottom:1em;" class="button button-primary button-large jwt-sso-button"
-                   href="<?php echo site_url('?auth=sso'); ?>">Login via Camoo.Hosting</a>
+                   href="<?php esc_attr_e(site_url('?auth=sso')); ?>"><?php echo __('Login via Camoo.Hosting', Bootstrap::DOMAIN_TEXT)?></a>
             </p>
             <div style="clear:both;"></div>
             <?php
         }
     }
 
-    public function single_sign_on_login_button_shortcode($atts)
+    public function single_sign_on_login_button_shortcode($atts): string
     {
         $a = shortcode_atts([
             'type' => 'primary',

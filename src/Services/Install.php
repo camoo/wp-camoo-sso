@@ -21,7 +21,6 @@ final class Install
     protected array $default_settings = [
         'redirect_to_dashboard' => 1,
         'client_id' => '',
-        'append_sso_url' => 0,
         'append_client_id' => 0,
         'sync_roles' => 1,
         'show_sso_button_login_page' => 1,

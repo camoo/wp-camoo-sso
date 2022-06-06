@@ -23,8 +23,8 @@ final class Integration
     public function initialize(): void
     {
         add_action('plugins_loaded', [$this, 'init_actions']);
-        register_activation_hook(WP_CAMOO_CDN_DIR . 'camoo-sso.php', [Install::class, 'install']);
-        register_deactivation_hook(WP_CAMOO_CDN_DIR . 'camoo-sso.php', [$this, 'sso_status_plugin_deactivate']);
+        register_activation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [new Install(), 'install']);
+        register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'sso_status_plugin_deactivate']);
     }
 
     public function init_actions(): void
@@ -34,6 +34,11 @@ final class Integration
         add_filter('login_headertext', [$this, 'wrapLoginFormStart']);
         add_action('login_enqueue_scripts', [$this, 'provideSsoStyle']);
         add_action('login_footer', [$this, 'wrapLoginFormEnd']);
+    }
+
+    public function sso_status_plugin_deactivate()
+    {
+        flush_rewrite_rules();
     }
 
     public function wrapLoginFormEnd(): void
