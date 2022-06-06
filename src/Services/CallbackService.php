@@ -108,21 +108,21 @@ class CallbackService
         wp_die('Single Sign On Failed.');
     }
 
-    private function manageLoginCookie(stdClass $user_info, array $roles, bool $syncRoles, bool $isNew = false): void
+    private function manageLoginCookie(stdClass $userInfo, array $roles, bool $syncRoles, bool $isNew = false): void
     {
-        $user = get_user_by('login', $user_info->user_login);
+        $user = get_user_by('login', $userInfo->user_login);
         if (!$user instanceof WP_User) {
             return;
         }
         $loginUser = [
             'ID' => $user->ID,
-            'display_name' => sanitize_text_field($user_info->user_email),
-            'nickname' => sanitize_text_field($user_info->user_email),
-            'first_name' => sanitize_text_field($user_info->first_name),
-            'last_name' => sanitize_text_field($user_info->last_name),
+            'display_name' => sanitize_text_field($userInfo->user_email),
+            'nickname' => sanitize_text_field($userInfo->user_email),
+            'first_name' => sanitize_text_field($userInfo->first_name),
+            'last_name' => sanitize_text_field($userInfo->last_name),
         ];
         if (!$isNew) {
-            $loginUser['user_email'] = sanitize_text_field($user_info->user_email);
+            $loginUser['user_email'] = sanitize_text_field($userInfo->user_email);
         }
         wp_update_user($loginUser);
 

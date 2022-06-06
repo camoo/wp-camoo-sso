@@ -84,8 +84,6 @@ class AdminController
                         <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
                         <table class="form-table">
 
-
-
                             <tr valign="top">
                                 <th scope="row"><?php echo __('Client Identifier', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
@@ -94,9 +92,8 @@ class AdminController
                                 </td>
                             </tr>
 
-
                             <tr valign="top">
-                                <th scope="row"><?php echo __('Redirect t o dashboard after login', Bootstrap::DOMAIN_TEXT)?></th>
+                                <th scope="row"><?php echo __('Redirect to dashboard after login', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
                                     <input type="checkbox" name="<?php echo $this->option_name ?>[redirect_to_dashboard]"
                                            value="1" <?php echo !empty($options['redirect_to_dashboard']) && $options['redirect_to_dashboard'] == 1 ? 'checked="checked"' : ''; ?> />
@@ -134,9 +131,9 @@ class AdminController
 
     public function validate(array $input): array
     {
-        $input['append_client_id'] = isset($input['append_client_id']) ? $input['append_client_id'] : 0;
-        $input['sync_roles'] = isset($input['sync_roles']) ? $input['sync_roles'] : 0;
-        $input['show_sso_button_login_page'] = isset($input['show_sso_button_login_page']) ? $input['show_sso_button_login_page'] : 0;
+        $input['append_client_id'] = isset($input['append_client_id']) ? esc_attr($input['append_client_id']) : 0;
+        $input['sync_roles'] = isset($input['sync_roles']) ? esc_attr($input['sync_roles']) : 0;
+        $input['show_sso_button_login_page'] = isset($input['show_sso_button_login_page']) ? esc_attr($input['show_sso_button_login_page']) : 0;
 
         return $input;
     }

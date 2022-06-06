@@ -57,7 +57,7 @@ final class Integration
     public function wrapLoginFormStart(): void
     {
         echo '<section class="camoo-sso-header">
-                <img class="logo" src="https://www.camoo.hosting/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
+                <img class="logo" src="' . WP_CAMOO_SSO_SITE . '/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
 	           </section>
 	           <section class="assistant-card-container">
 		            <div class="assistant-card card-login">

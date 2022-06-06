@@ -39,12 +39,20 @@ final class Bootstrap
     public function modify_plugin_description(array $all_plugins): array
     {
         if (isset($all_plugins[self::PLUGIN_MAIN_FILE])) {
-            $all_plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = sprintf(
-                __(
+            $all_plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
+                sprintf(
+                    __(
                     'Camoo.Hosting SSO for WordPress. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
                     Bootstrap::DOMAIN_TEXT
                 ),
-                WP_CAMOO_SSO_SITE . '/wordpress-hosting'
+                    WP_CAMOO_SSO_SITE . '/wordpress-hosting'
+                ),
+                [
+                    'a' => [
+                        'href' => true,
+                        'target' => true,
+                    ],
+                ]
             );
         }
 
@@ -86,8 +94,8 @@ final class Bootstrap
                 'a' => [
                     'href' => true,
                     'target' => true,
-                    'rel' => true,
-                    'id' => true,
+                    'title' => true,
+                    'class' => true,
                 ],
             ]
         );
