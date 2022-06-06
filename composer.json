@@ -1,0 +1,15 @@
+{
+	"name": "camoo/wp-camoo-sso",
+	"description": "Camoo.Hosting SSO Integration for WordPress",
+	"homepage": "https://camoo.Hosting",
+	"type": "project",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"WP_CAMOO\\SSO\\": "src"
+		}
+	},
+	"require": {
+		"lcobucci/jwt": "^4.1"
+	}
+}

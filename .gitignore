@@ -1,0 +1,4 @@
+vendor
+.DS
+tests
+.php-cs-fixer.cache
