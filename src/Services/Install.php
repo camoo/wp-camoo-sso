@@ -39,7 +39,6 @@ final class Install
         $this->option->add('wp_camoo_sso_db_version', WP_CAMOO_SSO_VERSION);
         $this->option->delete('wp_notification_new_wp_version');
 
-        // Sync default options with existing options so new options are automatically added when the plugin is updated
         $options = $this->option->get();
         foreach ($this->default_settings as $key => $value) {
             if (!array_key_exists($key, $options)) {

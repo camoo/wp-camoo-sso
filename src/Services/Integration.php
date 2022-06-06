@@ -50,7 +50,7 @@ final class Integration
     {
         wp_enqueue_style(
             'camoo-sso',
-            plugins_url('/assets/css/login.css', __FILE__)
+            plugins_url('/assets/css/login.css', dirname(__DIR__))
         );
     }
 
@@ -79,8 +79,8 @@ final class Integration
 
     public function registerSsoFiles(): void
     {
-        wp_register_style('camoo-sso-admin', plugins_url('/assets/css/admin.css', __FILE__));
-        wp_register_style('camoo-sso-jquery-ui', plugins_url('/assets/css/jquery-ui.css', __FILE__));
-        wp_register_script('camoo-sso-admin', plugins_url('/assets/js/admin.js', __FILE__));
+        wp_register_style('camoo-sso-admin', plugins_url('/assets/css/admin.css', dirname(__DIR__)));
+        wp_register_style('camoo-sso-jquery-ui', plugins_url('/assets/css/jquery-ui.css', dirname(__DIR__)));
+        wp_register_script('camoo-sso-admin', plugins_url('/assets/js/admin.js', dirname(__DIR__)));
     }
 }

@@ -56,7 +56,6 @@ class AdminController
     public function admin_head(): void
     {
 
-        // Jquery Accordion
         wp_enqueue_style('camoo-sso-jquery-ui');
         wp_enqueue_script('jquery-ui-accordion');
 
@@ -109,7 +108,7 @@ class AdminController
                                 <th scope="row"><?php echo __('Sync roles with Camoo', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
                                     <input type="checkbox" name="<?php echo $this->option_name ?>[sync_roles]"
-                                           value="1" <?php echo !empty($options['show_sso_button_login_page']) && $options['sync_roles'] == 1 ? 'checked="checked"' : ''; ?> />
+                                           value="1" <?php echo !empty($options['sync_roles']) && $options['sync_roles'] == 1 ? 'checked="checked"' : ''; ?> />
                                 </td>
                             </tr>
 

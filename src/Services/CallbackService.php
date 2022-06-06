@@ -84,20 +84,20 @@ class CallbackService
 
         $roles = $token->headers()->get('roles');
         $userData = $token->claims()->get('ufo');
-        $user_info = $this->getUserInfo($userData);
+        $userInfo = $this->getUserInfo($userData);
 
-        $userId = username_exists($user_info->user_login);
+        $userId = username_exists($userInfo->user_login);
         $isNew = false;
 
-        if (!$userId && email_exists($user_info->user_email) === false) {
+        if (!$userId && email_exists($userInfo->user_email) === false) {
             $random_password = wp_generate_password(12, false);
-            $userId = wp_create_user($user_info->user_login, $random_password, $user_info->user_email);
+            $userId = wp_create_user($userInfo->user_login, $random_password, $userInfo->user_email);
             $isNew = $userId > 0;
-            do_action('wpoc_user_created', $user_info, 1);
+            do_action('wpoc_user_created', $userInfo, 1);
         } else {
-            do_action('wpoc_user_login', $user_info, 1);
+            do_action('wpoc_user_login', $userInfo, 1);
         }
-        $this->manageLoginCookie($user_info, $roles, !empty($sso_options['sync_roles']), $isNew);
+        $this->manageLoginCookie($userInfo, $roles, !empty($sso_options['sync_roles']), $isNew);
 
         $user_redirect = $this->getUserRedirectUrl($sso_options);
 

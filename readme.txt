@@ -8,14 +8,22 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Camoo.Hosting Automatic Integration with SSO for WordPress websites.
+Camoo.Hosting Single sign On for WordPress websites.
 
 == Description ==
 Camoo.Hosting Single sign On for Managed WordPress sites
-This plugin allows you to easily use SSO on your WordPress and accelerate website loading in any country, handling any load on your service.
+This plugin allows signing in Camoo.Hosting users via SSO to your managed WordPress without having to remember any password of your website.
+Please note that the user information and role mappings are updated each time the user logs in via SSO. If you do not want to sync the roles from your existing system to WordPress, you can disable the functionality via the settings page.
+
+
+== Installation ==
+
+1. Upload the downloaded plugin folder to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. In the administration dashboard, go to "Settings" > "Single Sign On" and configure the CAMOO-SOO settings.
 
 = Features =
-* Replace static links with SSO links
+* SSO for managed CAMOO.Hosting managed WordPress
 
 == Frequently Asked Questions ==
 
@@ -23,13 +31,14 @@ This plugin allows you to easily use SSO on your WordPress and accelerate websit
 CAMOO SSO is an Automatic SSO Integration for WordPress sites hosted by Camoo.Hosting
 
 = Do I need to do something after the plugin has been activated? =
-No, You don't! After you purchase a WordPress Hosting order, our system will add the camoo SSO url automatically in your Managed WordPress installation.
+No, You don't! After you purchase a WordPress Hosting order, our system will add the CAMOO-SSO plugin automatically in your Managed WordPress installation.
 
 = How can I purchase a WordPress Hosting order? =
 All you need is just to [visit our hosting packages](https://www.camoo.hosting/wordpress-hosting).
 
 == Screenshots ==
-1. Install CAMOO SSO from WordPress Plugin Directory
+1. Install CAMOO SSO Settings option
+2. Managed WordPress Login page with SSO button
 
 == Upgrade Notice ==
 N/A

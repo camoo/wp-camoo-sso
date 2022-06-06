@@ -59,9 +59,7 @@ final class Bootstrap
             <p style="text-align: center;
     text-transform: uppercase;
     position: relative;" class="sso-login-or"><span><?php echo __('OR', Bootstrap::DOMAIN_TEXT) ?></span></p>
-            <p style="padding-bottom: 1px;
-    margin: 20px auto;
-    text-align: center;">
+            <p style="padding-bottom: 1px;margin: 20px auto;text-align: center;">
                 <a style="color:#FFF; width:100%; text-align:center; margin-bottom:1em;" class="button button-primary button-large jwt-sso-button"
                    href="<?php esc_attr_e(site_url('?auth=sso')); ?>"><?php echo __('Login via Camoo.Hosting', Bootstrap::DOMAIN_TEXT)?></a>
             </p>
@@ -72,18 +70,18 @@ final class Bootstrap
 
     public function single_sign_on_login_button_shortcode($atts): string
     {
-        $a = shortcode_atts([
+        $btnAttr = shortcode_atts([
             'type' => 'primary',
-            'title' => 'Login using Single Sign On',
+            'title' => __('Login using Single Sign On', Bootstrap::DOMAIN_TEXT),
             'class' => 'sso-button',
             'target' => '_blank',
-            'text' => 'Login via Camoo.Hosting',
+            'text' => __('Login via Camoo.Hosting', Bootstrap::DOMAIN_TEXT),
         ], $atts);
 
         return wp_kses(
-            '<a class="' . esc_attr($a['class']) .
+            '<a class="' . esc_attr($btnAttr['class']) .
             '" href="' . site_url('?auth=sso') .
-            '" title="' . esc_attr($a['title']) . '" target="' . esc_attr($a['target']) . '">' . $a['text'] . '</a>',
+            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' . $btnAttr['text'] . '</a>',
             [
                 'a' => [
                     'href' => true,

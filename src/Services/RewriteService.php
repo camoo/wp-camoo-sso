@@ -6,7 +6,7 @@ namespace WP_CAMOO\SSO\Services;
 
 defined('ABSPATH') or die('You are not allowed to call this script directly!');
 
-class RewriteService
+final class RewriteService
 {
     public function initialize()
     {

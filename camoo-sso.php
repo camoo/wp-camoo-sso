@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * Plugin Name: CAMOO SSO
  * Plugin URI:  https://github.com/camoo/wp-camoo-sso
- * Description: Camoo.Hosting Automatic SSO Integration
+ * Description: Camoo.Hosting Single sign On for Managed WordPress sites
  * Version:     1.0
  * Author:      CAMOO SARL
  * Author URI:  https://www.camoo.hosting/
