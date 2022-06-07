@@ -89,7 +89,7 @@ final class Bootstrap
         );
     }
 
-    public function generateSsoButton($attributes): string
+    public function generateSsoButton(array $attributes): string
     {
         $btnAttr = shortcode_atts([
             'type' => 'primary',
@@ -102,7 +102,8 @@ final class Bootstrap
         return wp_kses(
             '<a class="' . esc_attr($btnAttr['class']) .
             '" href="' . site_url('?auth=sso') .
-            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' . esc_attr($btnAttr['text']) . '</a>',
+            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' .
+            esc_attr($btnAttr['text']) . '</a>',
             [
                 'a' => [
                     'href' => true,
