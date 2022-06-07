@@ -102,7 +102,7 @@ final class Bootstrap
         return wp_kses(
             '<a class="' . esc_attr($btnAttr['class']) .
             '" href="' . site_url('?auth=sso') .
-            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' . $btnAttr['text'] . '</a>',
+            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' . esc_attr($btnAttr['text']) . '</a>',
             [
                 'a' => [
                     'href' => true,
