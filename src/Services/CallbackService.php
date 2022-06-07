@@ -105,7 +105,7 @@ class CallbackService
             wp_redirect($user_redirect);
             exit;
         }
-        wp_die('Single Sign On Failed.');
+        wp_die('Single Sign On Login Failed.');
     }
 
     private function manageLoginCookie(stdClass $userInfo, array $roles, bool $syncRoles, bool $isNew = false): void

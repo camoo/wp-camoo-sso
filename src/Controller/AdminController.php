@@ -65,17 +65,14 @@ class AdminController
     public function options_do_page(): void
     {
         $options = $this->option->get();
+
+        $adminInfo = sprintf(__('When activated, this plugin adds a Single Sign On button to the login screen.<br/><strong>NOTE:</strong> If you want to add a custom link anywhere in your theme simply link to <strong>%s</strong> if the user is not logged in.', Bootstrap::DOMAIN_TEXT), esc_attr(site_url('?auth=sso')));
         $this->admin_head(); ?>
         <div class="wrap">
             <h2><?php echo __('Single Sign On Configuration', Bootstrap::DOMAIN_TEXT)?></h2>
-            <p>
-                When activated, this plugin adds a Single Sign On button to the login screen.
-                <br/>
-                <strong>NOTE:</strong> If you want to add a
-                custom link anywhere in your theme simply link to
-                <strong><?php  esc_attr_e(site_url('?auth=sso')); ?></strong>
-                if the user is not logged in.
-            </p>
+
+            <?php echo '<p>' . $this->notice($adminInfo) . '</p>'; ?>
+
             <br />
             <div>
                 <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', Bootstrap::DOMAIN_TEXT)?></h3>
@@ -136,5 +133,14 @@ class AdminController
         $input['show_sso_button_login_page'] = isset($input['show_sso_button_login_page']) ? esc_attr($input['show_sso_button_login_page']) : 0;
 
         return $input;
+    }
+
+    private function notice(string $text): string
+    {
+        return '
+        <div class="notice notice-' . 'info' . '">
+           <div style="' . 'padding:12px;' . '">' . $text . '</div>
+        </div>
+        ';
     }
 }
