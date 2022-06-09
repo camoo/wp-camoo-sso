@@ -64,7 +64,11 @@ class AdminController
 
     public function options_do_page(): void
     {
-        $options = $this->option->get();
+        $rawOptions = $this->option->get();
+
+        $options = array_map(function ($value) {
+            return !empty($value) ? esc_html($value) : '';
+        }, $rawOptions);
 
         $adminInfo = sprintf(__('When activated, this plugin adds a Single Sign On button to the login screen.<br/><strong>NOTE:</strong> If you want to add a custom link anywhere in your theme simply link to <strong>%s</strong> if the user is not logged in.', Bootstrap::DOMAIN_TEXT), esc_attr(site_url('?auth=sso')));
         $this->admin_head(); ?>
@@ -84,7 +88,7 @@ class AdminController
                             <tr valign="top">
                                 <th scope="row"><?php echo __('Client Identifier', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
-                                    <input type="text" name="<?php echo $this->option_name ?>[client_id]"
+                                    <input type="text" name="<?php echo esc_html($this->option_name); ?>[client_id]"
                                            value="<?php echo $options['client_id'] ?? ''; ?>"/>
                                 </td>
                             </tr>
@@ -92,7 +96,7 @@ class AdminController
                             <tr valign="top">
                                 <th scope="row"><?php echo __('Redirect to dashboard after login', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
-                                    <input type="checkbox" name="<?php echo $this->option_name ?>[redirect_to_dashboard]"
+                                    <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[redirect_to_dashboard]"
                                            value="1" <?php echo !empty($options['redirect_to_dashboard']) && $options['redirect_to_dashboard'] == 1 ? 'checked="checked"' : ''; ?> />
                                 </td>
                             </tr>
@@ -100,7 +104,7 @@ class AdminController
                             <tr valign="top">
                                 <th scope="row"><?php echo __('Sync roles with Camoo', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
-                                    <input type="checkbox" name="<?php echo $this->option_name ?>[sync_roles]"
+                                    <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[sync_roles]"
                                            value="1" <?php echo !empty($options['sync_roles']) && $options['sync_roles'] == 1 ? 'checked="checked"' : ''; ?> />
                                 </td>
                             </tr>
@@ -108,7 +112,7 @@ class AdminController
                             <tr valign="top">
                                 <th scope="row"><?php echo __('Show SSO button on login page', Bootstrap::DOMAIN_TEXT)?></th>
                                 <td>
-                                    <input type="checkbox" name="<?php echo $this->option_name ?>[show_sso_button_login_page]"
+                                    <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[show_sso_button_login_page]"
                                            value="1" <?php echo !empty($options['show_sso_button_login_page']) && $options['show_sso_button_login_page'] == 1 ? 'checked="checked"' : ''; ?> />
                                 </td>
                             </tr>

@@ -116,13 +116,13 @@ class CallbackService
         }
         $loginUser = [
             'ID' => $user->ID,
-            'display_name' => sanitize_text_field($userInfo->user_email),
-            'nickname' => sanitize_text_field($userInfo->user_email),
+            'display_name' => sanitize_email($userInfo->user_email),
+            'nickname' => sanitize_email($userInfo->user_email),
             'first_name' => sanitize_text_field($userInfo->first_name),
             'last_name' => sanitize_text_field($userInfo->last_name),
         ];
         if (!$isNew) {
-            $loginUser['user_email'] = sanitize_text_field($userInfo->user_email);
+            $loginUser['user_email'] = sanitize_email($userInfo->user_email);
         }
         wp_update_user($loginUser);
 
