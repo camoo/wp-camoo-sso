@@ -30,7 +30,6 @@ class AdminController
     {
         add_action('admin_init', [new self(), 'admin_init']);
         add_action('admin_menu', [new self(), 'add_page']);
-        add_action('admin_notices', [$this, 'displayAdminNotice']);
     }
 
     public function admin_init(): void
@@ -71,6 +70,15 @@ class AdminController
         $this->admin_head(); ?>
         <div class="wrap">
             <h2><?php echo __('Single Sign On Configuration', 'camoo-sso')?></h2>
+
+        <div class="notice notice-' . 'info' . ' is-dismissible"">
+           <div style="' . 'padding:12px;' . '">
+               <p>
+                   When activated, this plugin adds a Single Sign On button to the login screen.
+                   <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme simply link to <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
+               </p>
+           </div>
+        </div>
 
             <br />
             <div>
@@ -144,19 +152,5 @@ class AdminController
             esc_attr($input['show_sso_button_login_page']) : 0;
 
         return $input;
-    }
-
-    public function displayAdminNotice(): void
-    {
-        ?>
-        <div class="notice notice-' . 'info' . '">
-           <div style="' . 'padding:12px;' . '">
-               <p>
-                   When activated, this plugin adds a Single Sign On button to the login screen.
-                   <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme simply link to <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
-               </p>
-           </div>
-        </div>
-        <?php
     }
 }
