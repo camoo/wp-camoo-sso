@@ -41,6 +41,21 @@ class CallbackService
         $this->applyLogin($sso_options);
     }
 
+    private function sanitizeObject(stdClass $userInfo): stdClass
+    {
+        $output = new stdClass();
+
+        foreach ($userInfo as $param => $value) {
+            if ($param === 'user_email') {
+                $output->{$param} = sanitize_email($value);
+            } else {
+                $output->{$param} = sanitize_text_field($value);
+            }
+        }
+
+        return $output;
+    }
+
     private function applyRedirect(): void
     {
         wp_redirect(
@@ -77,7 +92,8 @@ class CallbackService
         $tokenService = new TokenService($code);
 
         if (!$this->validateToken($tokenService)) {
-            wp_die('Single Sign On failed! Click here to go back to the home page: <a href="' . site_url() . '">Home</a>');
+            wp_die('Single Sign On failed! Click here to go back to the home page: <a href="' . site_url() .
+                '">Home</a>');
         }
 
         $token = $tokenService->getToken();
@@ -93,9 +109,9 @@ class CallbackService
             $random_password = wp_generate_password(12, false);
             $userId = wp_create_user($userInfo->user_login, $random_password, $userInfo->user_email);
             $isNew = $userId > 0;
-            do_action('wpoc_user_created', $userInfo, 1);
+            do_action('wpoc_user_created', $this->sanitizeObject($userInfo), 1);
         } else {
-            do_action('wpoc_user_login', $userInfo, 1);
+            do_action('wpoc_user_login', $this->sanitizeObject($userInfo), 1);
         }
         $this->manageLoginCookie($userInfo, $roles, !empty($sso_options['sync_roles']), $isNew);
 

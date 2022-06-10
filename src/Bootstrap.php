@@ -53,7 +53,7 @@ final class Bootstrap
                 sprintf(
                     __(
                         'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without password. You will no longer need to remember any password or to save systematically password on your browser. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
-                        Bootstrap::DOMAIN_TEXT
+                        'camoo-sso'
                     ),
                     WP_CAMOO_SSO_SITE . '/wordpress-hosting'
                 ),
@@ -78,10 +78,10 @@ final class Bootstrap
 
         echo sprintf(
             '<p style="text-align: center;text-transform: uppercase;position: relative;" class="sso-login-or"><span>' .
-                __('OR', Bootstrap::DOMAIN_TEXT) . '</span></p>
+                __('OR', 'camoo-sso') . '</span></p>
             <p style="padding-bottom: 1px;margin: 20px auto;text-align: center;">
                 <a style="color:#FFF; width:%s; text-align:center; margin-bottom:1em;" class="button button-primary button-large jwt-sso-button"
-                   href="%s">' . __('Login via Camoo.Hosting', Bootstrap::DOMAIN_TEXT) . '</a>
+                   href="%s">' . __('Login via Camoo.Hosting', 'camoo-sso') . '</a>
             </p>
             <div style="clear:both;"></div>',
             '100%',
@@ -93,10 +93,10 @@ final class Bootstrap
     {
         $btnAttr = shortcode_atts([
             'type' => 'primary',
-            'title' => __('Login using Single Sign On', Bootstrap::DOMAIN_TEXT),
+            'title' => __('Login using Single Sign On', 'camoo-sso'),
             'class' => 'sso-button',
             'target' => '_blank',
-            'text' => __('Login via Camoo.Hosting', Bootstrap::DOMAIN_TEXT),
+            'text' => __('Login via Camoo.Hosting', 'camoo-sso'),
         ], $attributes);
 
         return wp_kses(

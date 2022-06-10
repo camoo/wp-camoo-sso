@@ -17,6 +17,10 @@ body.login div#login p#nav a {}
 body.login div#login p#backtoblog {}
 body.login div#login p#backtoblog a {}
 
+.td-camoo-sso-options {
+    vertical-align: top;
+}
+
 body.camoo-sso-assistent section.camoo-sso-header {
     line-height: 34px;
     width: 100%;
