@@ -2,7 +2,7 @@
 Contributors: camoo
 Tags: Camoo.Hosting, CAMOO SSO Integration, Managed Hosting with SSO, Hébergement Web avec SSO
 Requires at least: 5.6
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.4
 Stable tag: 1.0
 License: GPLv2 or later
@@ -37,12 +37,14 @@ No, You don't! After you purchase a WordPress Hosting order, our system will add
 All you need is just to [visit our hosting packages](https://www.camoo.hosting/wordpress-hosting).
 
 == Screenshots ==
-1. Install CAMOO SSO Settings option
-2. Managed WordPress Login page with SSO button
+1. Managed WordPress Login page with SSO button
+2. Go to settings for Single Sign On
+3. Apply CAMOO Single Sign On Settings option
 
 == Upgrade Notice ==
 N/A
 
 == Changelog ==
-= 1.0 =
+
+= 1.0: June 11, 2022 =
 * Start plugin

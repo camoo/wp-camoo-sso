@@ -8,7 +8,7 @@ use WP_CAMOO\SSO\Gateways\Option;
 
 defined('ABSPATH') or die('You are not allowed to call this script directly!');
 
-class AdminController
+final class AdminController
 {
     private const INPUT_CHECKED = 'checked="checked"';
 
@@ -28,16 +28,16 @@ class AdminController
 
     public function initialize(): void
     {
-        add_action('admin_init', [new self(), 'admin_init']);
-        add_action('admin_menu', [new self(), 'add_page']);
+        add_action('admin_init', [new self(), 'initAdmin']);
+        add_action('admin_menu', [new self(), 'addPage']);
     }
 
-    public function admin_init(): void
+    public function initAdmin(): void
     {
         register_setting(Option::MAIN_SETTING_KEY, $this->option_name, [$this, 'validate']);
     }
 
-    public function add_page(): void
+    public function addPage(): void
     {
         if (!current_user_can('camoo_sso')) {
             return;
@@ -49,12 +49,12 @@ class AdminController
             Option::MAIN_SETTING_KEY,
             [
                 $this,
-                'options_do_page',
+                'doPageOptions',
             ]
         );
     }
 
-    public function admin_head(): void
+    public function adminHead(): void
     {
         wp_enqueue_style('camoo-sso-jquery-ui');
         wp_enqueue_script('jquery-ui-accordion');
@@ -63,11 +63,11 @@ class AdminController
         wp_enqueue_script('camoo-sso-admin');
     }
 
-    public function options_do_page(): void
+    public function doPageOptions(): void
     {
         $options = $this->option->get();
 
-        $this->admin_head(); ?>
+        $this->adminHead(); ?>
         <div class="wrap">
             <h2><?php echo __('Single Sign On Configuration', 'camoo-sso')?></h2>
 
