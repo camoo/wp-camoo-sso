@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WP_CAMOO\SSO\Services;
 
+use WP_Role;
+
 if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
@@ -24,7 +26,7 @@ final class Integration
     {
         add_action('plugins_loaded', [$this, 'init_actions']);
         register_activation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [new Install(), 'install']);
-        register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'sso_status_plugin_deactivate']);
+        register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'deactivateCamooSso']);
     }
 
     public function init_actions(): void
@@ -36,8 +38,12 @@ final class Integration
         add_action('login_footer', [$this, 'wrapLoginFormEnd']);
     }
 
-    public function sso_status_plugin_deactivate()
+    public function deactivateCamooSso(): void
     {
+        $role = get_role('administrator');
+        if ($role instanceof WP_Role) {
+            $role->remove_cap('camoo_sso');
+        }
         flush_rewrite_rules();
     }
 

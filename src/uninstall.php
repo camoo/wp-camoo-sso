@@ -15,3 +15,8 @@ defined('WP_UNINSTALL_PLUGIN') || exit;
 
 delete_option('wp_camoo_sso_options');
 delete_option('wp_camoo_sso_db_version');
+
+$role = get_role('administrator');
+if ($role instanceof WP_Role) {
+    $role->remove_cap('camoo_sso');
+}
