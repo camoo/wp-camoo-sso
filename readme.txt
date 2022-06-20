@@ -48,6 +48,7 @@ N/A
 
 = 1.1: June 20, 2022 =
 * Tweak: remove `camoo_sso` permission from administrator roles on deactivate/uninstall
+* Tweak: Find user by email instead of by login
 * Fix: login page on mobile
 
 = 1.0: June 11, 2022 =

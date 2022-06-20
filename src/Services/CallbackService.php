@@ -126,7 +126,7 @@ class CallbackService
 
     private function manageLoginCookie(stdClass $userInfo, array $roles, bool $syncRoles, bool $isNew = false): void
     {
-        $user = get_user_by('login', $userInfo->user_login);
+        $user = get_user_by('email', $userInfo->user_login);
         if (!$user instanceof WP_User) {
             return;
         }
