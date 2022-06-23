@@ -19,6 +19,7 @@ use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use WP_CAMOO\SSO\Lib\ConstraintCollection;
+use WP_CAMOO\SSO\Lib\Helper;
 
 final class TokenService
 {
@@ -49,7 +50,9 @@ final class TokenService
         $constraint->add($clock);
         $issuedBy = new IssuedBy(WP_CAMOO_SSO_SITE, 'https://hpanel.camoo.hosting');
         $constraint->add($issuedBy);
-        $constraint->add(new PermittedFor(site_url()));
+        $siteUrl = site_url();
+        $site = !Helper::getInstance()->isInternalDomain($siteUrl) ? $siteUrl : site_url('', 'https');
+        $constraint->add(new PermittedFor($site));
         $configuration->setValidationConstraints($constraint);
 
         return $configuration;

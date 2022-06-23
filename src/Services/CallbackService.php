@@ -8,6 +8,7 @@ use stdClass;
 use Throwable;
 use WP_CAMOO\SSO\Bootstrap;
 use WP_CAMOO\SSO\Gateways\Option;
+use WP_CAMOO\SSO\Lib\Helper;
 use WP_User;
 
 defined('ABSPATH') or die('You are not allowed to call this script directly!');
@@ -156,7 +157,13 @@ class CallbackService
 
     private function getUserRedirectUrl(array $sso_options)
     {
-        $user_redirect_set = !empty($sso_options['redirect_to_dashboard']) ? get_dashboard_url() : site_url();
+        $dashboardUrl = get_dashboard_url();
+        $dashboardUrl = !Helper::getInstance()->isInternalDomain($dashboardUrl) ? $dashboardUrl :
+            get_dashboard_url(0, '', 'https');
+
+        $siteUrl = site_url();
+        $site = !Helper::getInstance()->isInternalDomain($siteUrl) ? $siteUrl : site_url('', 'https');
+        $user_redirect_set = !empty($sso_options['redirect_to_dashboard']) ? $dashboardUrl : $site;
 
         return apply_filters('wpssoc_user_redirect_url', $user_redirect_set);
     }

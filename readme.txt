@@ -4,7 +4,7 @@ Tags: Camoo.Hosting, CAMOO SSO Integration, Managed Hosting with SSO, Hébergeme
 Requires at least: 5.6
 Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ All you need is just to [visit our hosting packages](https://www.camoo.hosting/w
 N/A
 
 == Changelog ==
+
+= 1.2: June 23, 2022 =
+* Tweak: check internal domain audience only with https
 
 = 1.1: June 20, 2022 =
 * Tweak: remove `camoo_sso` permission from administrator roles on deactivate/uninstall
