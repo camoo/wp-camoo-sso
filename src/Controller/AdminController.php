@@ -81,9 +81,9 @@ final class AdminController
         </div>
 
             <br />
-            <div>
+            <div class="camoo-sso-settings-table">
                 <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', 'camoo-sso')?></h3>
-                <div>
+                <div class="camoo-sso-options-table">
                     <form method="post" action="options.php">
                         <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
                         <table class="form-table">
@@ -139,7 +139,6 @@ final class AdminController
                     </form>
                 </div>
             </div>
-        </div>
         <div style="clear:both;"></div>
         <?php
     }
