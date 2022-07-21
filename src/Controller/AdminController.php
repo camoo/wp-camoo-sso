@@ -69,83 +69,88 @@ final class AdminController
 
         $this->adminHead(); ?>
         <div class="wrap">
-            <h2><?php echo __('Single Sign On Configuration', 'camoo-sso')?></h2>
+            <h2><?php echo __('Single Sign On Configuration', 'camoo-sso') ?></h2>
 
-        <div class="notice notice-' . 'info' . ' is-dismissible"">
-           <div style="' . 'padding:12px;' . '">
-               <p>
-                   When activated, this plugin adds a Single Sign On button to the login screen.
-                   <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme simply link to <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
-               </p>
-           </div>
+            <div class="notice notice-' . 'info' . ' is-dismissible"
+            ">
+            <div style="' . 'padding:12px;' . '">
+                <p>
+                    When activated, this plugin adds a Single Sign On button to the login screen.
+                    <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme simply link to
+                    <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
+                </p>
+            </div>
         </div>
 
-            <br />
-            <div class="camoo-sso-settings-table">
-                <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', 'camoo-sso')?></h3>
-                <div class="camoo-sso-options-table">
-                    <form method="post" action="options.php">
-                        <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
-                        <table class="form-table">
+        <br/>
+        <div class="camoo-sso-settings-table">
+            <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', 'camoo-sso') ?></h3>
+            <div class="camoo-sso-options-table">
+                <form method="post" action="options.php">
+                    <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
+                    <table class="form-table">
 
-                            <tr class="td-camoo-sso-options">
-                                <th scope="row"><?php echo __('Client Identifier', 'camoo-sso')?></th>
-                                <td>
-                                    <label>
-                                        <input type="text" name="<?php echo esc_html($this->option_name); ?>[client_id]"
-                                               value="<?php echo empty($options['client_id']) ? '' : esc_html($options['client_id']); ?>"/>
-                                    </label>
-                                </td>
-                            </tr>
+                        <tr class="td-camoo-sso-options">
+                            <th scope="row"><?php echo __('Redirect to dashboard after login', 'camoo-sso') ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox"
+                                           name="<?php echo esc_html($this->option_name); ?>[redirect_to_dashboard]"
+                                           value="1" <?php echo !empty($options['redirect_to_dashboard']) &&
+                                    $options['redirect_to_dashboard'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                </label>
+                            </td>
+                        </tr>
 
-                            <tr class="td-camoo-sso-options">
-                                <th scope="row"><?php echo __('Redirect to dashboard after login', 'camoo-sso')?></th>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[redirect_to_dashboard]"
-                                               value="1" <?php echo !empty($options['redirect_to_dashboard']) &&
-                                        $options['redirect_to_dashboard'] == 1 ? self::INPUT_CHECKED : ''; ?> />
-                                    </label>
-                                </td>
-                            </tr>
+                        <tr class="td-camoo-sso-options">
+                            <th scope="row"><?php echo __('Sync roles with Camoo', 'camoo-sso') ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox"
+                                           name="<?php echo esc_html($this->option_name); ?>[sync_roles]"
+                                           value="1" <?php echo !empty($options['sync_roles']) &&
+                                    $options['sync_roles'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                </label>
+                            </td>
+                        </tr>
 
-                            <tr class="td-camoo-sso-options">
-                                <th scope="row"><?php echo __('Sync roles with Camoo', 'camoo-sso')?></th>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[sync_roles]"
-                                               value="1" <?php echo !empty($options['sync_roles']) &&
-                                        $options['sync_roles'] == 1 ? self::INPUT_CHECKED : ''; ?> />
-                                    </label>
-                                </td>
-                            </tr>
+                        <tr class="td-camoo-sso-options">
+                            <th scope="row"><?php echo __('Show SSO button on login page', 'camoo-sso') ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox"
+                                           name="<?php echo esc_html($this->option_name); ?>[show_sso_button_login_page]"
+                                           value="1" <?php echo !empty($options['show_sso_button_login_page']) &&
+                                    $options['show_sso_button_login_page'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="td-camoo-sso-options">
+                            <th scope="row"><?php echo __('Allow login accounts', 'camoo-sso') ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox"
+                                           name="<?php echo esc_html($this->option_name); ?>[allow_login_account]"
+                                           value="1" <?php echo !empty($options['allow_login_account']) &&
+                                    $options['allow_login_account'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                </label>
+                            </td>
+                        </tr>
 
-                            <tr class="td-camoo-sso-options">
-                                <th scope="row"><?php echo __('Show SSO button on login page', 'camoo-sso')?></th>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" name="<?php echo esc_html($this->option_name); ?>[show_sso_button_login_page]"
-                                               value="1" <?php echo !empty($options['show_sso_button_login_page']) &&
-                                        $options['show_sso_button_login_page'] == 1 ? self::INPUT_CHECKED : ''; ?> />
-                                    </label>
-                                </td>
-                            </tr>
+                    </table>
 
-                        </table>
-
-                        <p class="submit">
-                            <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/>
-                        </p>
-                    </form>
-                </div>
+                    <p class="submit">
+                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/>
+                    </p>
+                </form>
             </div>
+        </div>
         <div style="clear:both;"></div>
         <?php
     }
 
     public function validate(array $input): array
     {
-        $input['append_client_id'] = isset($input['append_client_id']) ? esc_attr($input['append_client_id']) : 0;
         $input['sync_roles'] = isset($input['sync_roles']) ? esc_attr($input['sync_roles']) : 0;
         $input['show_sso_button_login_page'] = isset($input['show_sso_button_login_page']) ?
             esc_attr($input['show_sso_button_login_page']) : 0;

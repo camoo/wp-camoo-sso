@@ -15,6 +15,8 @@ defined('ABSPATH') or die('You are not allowed to call this script directly!');
 
 class CallbackService
 {
+    private const LOGIN_USER_TYPE = 'l';
+
     private ?Option $options;
 
     /** @param Option|null $options */
@@ -70,7 +72,7 @@ class CallbackService
     private function validateToken(TokenService $tokenService): bool
     {
         try {
-            return  $tokenService->validate();
+            return $tokenService->validate();
         } catch (Throwable $exception) {
             wp_die('Single Sign On failed!! Click here to go back to the home page: <a href="' . site_url() .
                 '">Home</a>');
@@ -98,6 +100,11 @@ class CallbackService
         }
 
         $token = $tokenService->getToken();
+        $userType = $token->claims()->get('for');
+        if ($userType === self::LOGIN_USER_TYPE && empty($sso_options['allow_login_account'])) {
+            wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to the home page: <a href="' . site_url() .
+                '">Home</a>');
+        }
 
         $roles = $token->headers()->get('roles');
         $userData = $token->claims()->get('ufo');

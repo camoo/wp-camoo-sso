@@ -17,13 +17,14 @@ use  WP_CAMOO\SSO\Gateways\Option;
  */
 final class Install
 {
+    private const SETTING_LOGIN_USERS_FROM = '1.4';
+
     /** Default Settings */
     protected array $default_settings = [
         'redirect_to_dashboard' => 1,
-        'client_id' => '',
-        'append_client_id' => 0,
         'sync_roles' => 1,
         'show_sso_button_login_page' => 1,
+        'allow_login_account' => 1,
     ];
 
     private ?Option $option;
@@ -62,10 +63,20 @@ final class Install
     /** Upgrade plugin requirements if needed */
     public function upgrade(): void
     {
-        $installer_wp_camoo_sso_ver = $this->option->get('wp_camoo_sso_db_version');
+        $installed_wp_camoo_sso_ver = $this->option->get('wp_camoo_sso_db_version');
 
-        if ($installer_wp_camoo_sso_ver < WP_CAMOO_SSO_VERSION) {
+        if (version_compare($installed_wp_camoo_sso_ver, WP_CAMOO_SSO_VERSION, '<')) {
             $this->option->update('wp_camoo_sso_db_version', WP_CAMOO_SSO_VERSION);
+            if (version_compare($installed_wp_camoo_sso_ver, self::SETTING_LOGIN_USERS_FROM, '<')) {
+                $sso_options = $this->option->get();
+                $newSettings = [
+                    'redirect_to_dashboard' => $sso_options['redirect_to_dashboard'],
+                    'sync_roles' => $sso_options['sync_roles'],
+                    'show_sso_button_login_page' => $sso_options['show_sso_button_login_page'],
+                    'allow_login_account' => 1,
+                ];
+                $this->option->update('wp_camoo_sso_options', $newSettings);
+            }
         }
     }
 }
