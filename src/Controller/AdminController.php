@@ -126,13 +126,24 @@ final class AdminController
                             </td>
                         </tr>
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Allow login accounts', 'camoo-sso') ?></th>
+                            <th scope="row"><?php echo __('Allow login accounts from your main account', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->option_name); ?>[allow_login_account]"
                                            value="1" <?php echo !empty($options['allow_login_account']) &&
                                     $options['allow_login_account'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="td-camoo-sso-options">
+                            <th scope="row"><?php echo __('Disable username and password login', 'camoo-sso') ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox"
+                                           name="<?php echo esc_html($this->option_name); ?>[disable_username_password_login]"
+                                           value="1" <?php echo !empty($options['disable_username_password_login']) &&
+                                    $options['disable_username_password_login'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>
                             </td>
                         </tr>

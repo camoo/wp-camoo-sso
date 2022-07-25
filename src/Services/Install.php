@@ -25,6 +25,7 @@ final class Install
         'sync_roles' => 1,
         'show_sso_button_login_page' => 1,
         'allow_login_account' => 1,
+        'disable_username_password_login' => 0,
     ];
 
     private ?Option $option;

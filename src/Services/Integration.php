@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WP_CAMOO\SSO\Services;
 
+use WP_CAMOO\SSO\Gateways\Option;
 use WP_Role;
 
 if (!defined('ABSPATH')) {
@@ -36,6 +37,7 @@ final class Integration
         add_filter('login_headertext', [$this, 'wrapLoginFormStart']);
         add_action('login_enqueue_scripts', [$this, 'provideSsoStyle']);
         add_action('login_footer', [$this, 'wrapLoginFormEnd']);
+        add_action('login_init', [$this, 'disablePasswordLogin']);
     }
 
     public function deactivateCamooSso(): void
@@ -88,5 +90,18 @@ final class Integration
         wp_register_style('camoo-sso-admin', plugins_url('/assets/css/admin.css', dirname(__DIR__)));
         wp_register_style('camoo-sso-jquery-ui', plugins_url('/assets/css/jquery-ui.css', dirname(__DIR__)));
         wp_register_script('camoo-sso-admin', plugins_url('/assets/js/admin.js', dirname(__DIR__)));
+    }
+
+    public function disablePasswordLogin(): void
+    {
+        $settings = get_option(Option::MAIN_SETTING_KEY);
+        $canUsernameAndPasswordLogin = $settings['disable_username_password_login'] ?? 0;
+        if (empty($canUsernameAndPasswordLogin)) {
+            return;
+        }
+
+        if (isset($_POST['log']) || isset($_POST['user_login'])) {
+            wp_die(__('There has been a critical error on this website.'), 'Login');
+        }
     }
 }
