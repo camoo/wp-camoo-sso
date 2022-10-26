@@ -2,9 +2,9 @@
 Contributors: camoo
 Tags: Camoo.Hosting, CAMOO SSO Integration, Managed Hosting with SSO, Hébergement Web avec SSO
 Requires at least: 5.6
-Tested up to: 6.0.1
+Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,10 @@ All you need is just to [visit our hosting packages](https://www.camoo.hosting/w
 N/A
 
 == Changelog ==
+
+= 1.5.0: Nov 02, 2022 =
+* Tweak: using is_login function
+* Tweak: adjust variable names
 
 = 1.4: July 25, 2022 =
 * Tweak: Setting for disabling username and password login added

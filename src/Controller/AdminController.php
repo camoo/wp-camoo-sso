@@ -14,7 +14,7 @@ final class AdminController
 
     private Option $option;
 
-    private string $option_name = Option::MAIN_SETTING_KEY;
+    private string $optionName = Option::MAIN_SETTING_KEY;
 
     public function __construct(?Option $option = null)
     {
@@ -34,7 +34,7 @@ final class AdminController
 
     public function initAdmin(): void
     {
-        register_setting(Option::MAIN_SETTING_KEY, $this->option_name, [$this, 'validate']);
+        register_setting(Option::MAIN_SETTING_KEY, $this->optionName, [$this, 'validate']);
     }
 
     public function addPage(): void
@@ -95,7 +95,7 @@ final class AdminController
                             <td>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?php echo esc_html($this->option_name); ?>[redirect_to_dashboard]"
+                                           name="<?php echo esc_html($this->optionName); ?>[redirect_to_dashboard]"
                                            value="1" <?php echo !empty($options['redirect_to_dashboard']) &&
                                     $options['redirect_to_dashboard'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>
@@ -107,7 +107,7 @@ final class AdminController
                             <td>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?php echo esc_html($this->option_name); ?>[sync_roles]"
+                                           name="<?php echo esc_html($this->optionName); ?>[sync_roles]"
                                            value="1" <?php echo !empty($options['sync_roles']) &&
                                     $options['sync_roles'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>
@@ -119,7 +119,7 @@ final class AdminController
                             <td>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?php echo esc_html($this->option_name); ?>[show_sso_button_login_page]"
+                                           name="<?php echo esc_html($this->optionName); ?>[show_sso_button_login_page]"
                                            value="1" <?php echo !empty($options['show_sso_button_login_page']) &&
                                     $options['show_sso_button_login_page'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>
@@ -130,7 +130,7 @@ final class AdminController
                             <td>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?php echo esc_html($this->option_name); ?>[allow_login_account]"
+                                           name="<?php echo esc_html($this->optionName); ?>[allow_login_account]"
                                            value="1" <?php echo !empty($options['allow_login_account']) &&
                                     $options['allow_login_account'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>
@@ -141,7 +141,7 @@ final class AdminController
                             <td>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?php echo esc_html($this->option_name); ?>[disable_username_password_login]"
+                                           name="<?php echo esc_html($this->optionName); ?>[disable_username_password_login]"
                                            value="1" <?php echo !empty($options['disable_username_password_login']) &&
                                     $options['disable_username_password_login'] == 1 ? self::INPUT_CHECKED : ''; ?> />
                                 </label>

@@ -20,22 +20,22 @@ final class Option
     /**
      * Get the whole Plugin Options
      *
-     * @param string|null $setting_name setting name
+     * @param string|null $settingName setting name
      *
      * @return mixed|string
      */
-    public function get(?string $setting_name = null)
+    public function get(?string $settingName = null)
     {
-        if (null === $setting_name) {
-            $setting_name = self::MAIN_SETTING_KEY;
+        if (null === $settingName) {
+            $settingName = self::MAIN_SETTING_KEY;
         }
 
-        return get_option($setting_name);
+        return get_option($settingName);
     }
 
-    public function add(string $option_name, $option_value): void
+    public function add(string $name, $value): void
     {
-        add_option($option_name, $option_value);
+        add_option($name, $value);
     }
 
     public function delete(string $name): void
@@ -43,8 +43,8 @@ final class Option
         delete_option($name);
     }
 
-    public function update(string $option_name, $option_value): void
+    public function update(string $name, $value): void
     {
-        update_option($option_name, $option_value);
+        update_option($name, $value);
     }
 }

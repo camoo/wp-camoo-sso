@@ -25,7 +25,6 @@ final class ConstraintCollection implements Constraint, IteratorAggregate
         $this->container[] = $constraint;
     }
 
-    /** @return ArrayIterator */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this);

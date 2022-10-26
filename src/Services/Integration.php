@@ -25,12 +25,12 @@ final class Integration
 
     public function initialize(): void
     {
-        add_action('plugins_loaded', [$this, 'init_actions']);
+        add_action('plugins_loaded', [$this, 'initActions']);
         register_activation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [new Install(), 'install']);
         register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'deactivateCamooSso']);
     }
 
-    public function init_actions(): void
+    public function initActions(): void
     {
         add_filter('login_body_class', [$this, 'addClassBody']);
         add_action('wp_loaded', [$this, 'registerSsoFiles']);
@@ -51,11 +51,17 @@ final class Integration
 
     public function wrapLoginFormEnd(): void
     {
+        if (!is_login()) {
+            return;
+        }
         echo '</div></div></div></section>';
     }
 
     public function provideSsoStyle(): void
     {
+        if (!is_login()) {
+            return;
+        }
         wp_enqueue_style(
             'camoo-sso',
             plugins_url('/assets/css/login.css', dirname(__DIR__))
@@ -64,6 +70,9 @@ final class Integration
 
     public function wrapLoginFormStart(): void
     {
+        if (!is_login()) {
+            return;
+        }
         echo '<section class="camoo-sso-header">
                 <img class="logo" src="' . WP_CAMOO_SSO_SITE . '/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
 	           </section>

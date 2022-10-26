@@ -69,11 +69,11 @@ final class Install
         if (version_compare($installed_wp_camoo_sso_ver, WP_CAMOO_SSO_VERSION, '<')) {
             $this->option->update('wp_camoo_sso_db_version', WP_CAMOO_SSO_VERSION);
             if (version_compare($installed_wp_camoo_sso_ver, self::SETTING_LOGIN_USERS_FROM, '<')) {
-                $sso_options = $this->option->get();
+                $options = $this->option->get();
                 $newSettings = [
-                    'redirect_to_dashboard' => $sso_options['redirect_to_dashboard'],
-                    'sync_roles' => $sso_options['sync_roles'],
-                    'show_sso_button_login_page' => $sso_options['show_sso_button_login_page'],
+                    'redirect_to_dashboard' => $options['redirect_to_dashboard'],
+                    'sync_roles' => $options['sync_roles'],
+                    'show_sso_button_login_page' => $options['show_sso_button_login_page'],
                     'allow_login_account' => 1,
                 ];
                 $this->option->update('wp_camoo_sso_options', $newSettings);
