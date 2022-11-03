@@ -46,7 +46,7 @@ N/A
 
 == Changelog ==
 
-= 1.5.0: Nov 02, 2022 =
+= 1.5.0: Nov 03, 2022 =
 * Tweak: using is_login function
 * Tweak: adjust variable names
 
