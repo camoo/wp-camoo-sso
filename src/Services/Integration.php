@@ -18,6 +18,8 @@ if (!defined('ABSPATH')) {
  */
 final class Integration
 {
+    private const AT_LEAST_VERSION = '6.1';
+
     public static function getInstance(): self
     {
         return new self();
@@ -51,7 +53,7 @@ final class Integration
 
     public function wrapLoginFormEnd(): void
     {
-        if (!is_login()) {
+        if (!$this->isLoginPage()) {
             return;
         }
         echo '</div></div></div></section>';
@@ -59,7 +61,7 @@ final class Integration
 
     public function provideSsoStyle(): void
     {
-        if (!is_login()) {
+        if (!$this->isLoginPage()) {
             return;
         }
         wp_enqueue_style(
@@ -70,7 +72,7 @@ final class Integration
 
     public function wrapLoginFormStart(): void
     {
-        if (!is_login()) {
+        if (!$this->isLoginPage()) {
             return;
         }
         echo '<section class="camoo-sso-header">
@@ -112,5 +114,14 @@ final class Integration
         if (isset($_POST['log']) || isset($_POST['user_login'])) {
             wp_die(__('There has been a critical error on this website.'), 'Login');
         }
+    }
+
+    private function isLoginPage(): bool
+    {
+        if (!is_wp_version_compatible(self::AT_LEAST_VERSION)) {
+            return true;
+        }
+
+        return is_login();
     }
 }

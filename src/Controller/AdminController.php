@@ -126,7 +126,9 @@ final class AdminController
                             </td>
                         </tr>
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Allow login accounts from your main account', 'camoo-sso') ?></th>
+                            <th scope="row">
+                                <?php echo __('Allow login accounts from your main account', 'camoo-sso') ?>
+                            </th>
                             <td>
                                 <label>
                                     <input type="checkbox"
