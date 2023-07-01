@@ -31,7 +31,7 @@ final class Bootstrap
         Integration::getInstance()->initialize();
         RewriteService::getInstance()->initialize();
         AdminController::getInstance()->initialize();
-        add_filter('all_plugins', [$this, 'modify_plugin_description']);
+        add_filter('all_plugins', [$this, 'modifyPluginDescription']);
         add_action('login_form', [$this, 'addCamooSsoButton'], 10, 1);
         add_shortcode('sso_button', [$this, 'generateSsoButton']);
         add_action('init', [$this, 'loadTextDomain']);
@@ -46,10 +46,10 @@ final class Bootstrap
         );
     }
 
-    public function modify_plugin_description(array $all_plugins): array
+    public function modifyPluginDescription(array $plugins): array
     {
-        if (isset($all_plugins[self::PLUGIN_MAIN_FILE])) {
-            $all_plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
+        if (isset($plugins[self::PLUGIN_MAIN_FILE])) {
+            $plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
                 sprintf(
                     __(
                         'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without password. You will no longer need to remember any password or to save systematically password on your browser. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
@@ -66,7 +66,7 @@ final class Bootstrap
             );
         }
 
-        return $all_plugins;
+        return $plugins;
     }
 
     public function addCamooSsoButton(): void

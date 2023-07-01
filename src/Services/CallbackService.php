@@ -65,7 +65,7 @@ class CallbackService
             302,
             'WP-' . Bootstrap::DOMAIN_TEXT . ':' . WP_CAMOO_SSO_VERSION
         );
-        die;
+        exit;
     }
 
     private function validateToken(TokenService $tokenService): bool
@@ -161,6 +161,7 @@ class CallbackService
         wp_set_auth_cookie($user->ID);
     }
 
+    /** @return mixed|null */
     private function getUserRedirectUrl(array $options)
     {
         $dashboardUrl = get_dashboard_url();

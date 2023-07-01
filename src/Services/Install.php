@@ -20,7 +20,7 @@ final class Install
     private const SETTING_LOGIN_USERS_FROM = '1.4';
 
     /** Default Settings */
-    protected array $default_settings = [
+    protected array $defaultSettings = [
         'redirect_to_dashboard' => 1,
         'sync_roles' => 1,
         'show_sso_button_login_page' => 1,
@@ -45,7 +45,7 @@ final class Install
         if (empty($options)) {
             $options = [];
         }
-        foreach ($this->default_settings as $key => $value) {
+        foreach ($this->defaultSettings as $key => $value) {
             if (!array_key_exists($key, $options)) {
                 $options[$key] = $value;
             }
@@ -64,11 +64,11 @@ final class Install
     /** Upgrade plugin requirements if needed */
     public function upgrade(): void
     {
-        $installed_wp_camoo_sso_ver = $this->option->get('wp_camoo_sso_db_version');
+        $installedCamooSsoVersion = $this->option->get('wp_camoo_sso_db_version');
 
-        if (version_compare($installed_wp_camoo_sso_ver, WP_CAMOO_SSO_VERSION, '<')) {
+        if (version_compare($installedCamooSsoVersion, WP_CAMOO_SSO_VERSION, '<')) {
             $this->option->update('wp_camoo_sso_db_version', WP_CAMOO_SSO_VERSION);
-            if (version_compare($installed_wp_camoo_sso_ver, self::SETTING_LOGIN_USERS_FROM, '<')) {
+            if (version_compare($installedCamooSsoVersion, self::SETTING_LOGIN_USERS_FROM, '<')) {
                 $options = $this->option->get();
                 $newSettings = [
                     'redirect_to_dashboard' => $options['redirect_to_dashboard'],
