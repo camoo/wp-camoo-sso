@@ -20,6 +20,7 @@ use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use WP_CAMOO\SSO\Lib\ConstraintCollection;
 use WP_CAMOO\SSO\Lib\Helper;
+use WP_CAMOO\SSO\Lib\JwtEmptyInMemory;
 
 final class TokenService
 {
@@ -39,7 +40,7 @@ final class TokenService
         $key = InMemory::file(dirname(plugin_dir_path(__FILE__), 2) . '/config/pub.pem');
         $configuration = Configuration::forAsymmetricSigner(
             $oSigner,
-            InMemory::empty(),
+            JwtEmptyInMemory::default(),
             $key,
         );
 

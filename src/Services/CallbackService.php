@@ -15,9 +15,10 @@ defined('ABSPATH') or die('You are not allowed to call this script directly!');
 
 class CallbackService
 {
+    private const LOGIN_USER_TYPE = 'l';
+
     private ?Option $options;
 
-    /** @param Option|null $options */
     public function __construct(?Option $options = null)
     {
         $this->options = $options ?? new Option();
@@ -31,7 +32,7 @@ class CallbackService
             return;
         }
 
-        $sso_options = $this->options->get();
+        $options = $this->options->get();
 
         if (!isset($_GET['code'])) {
             $this->applyRedirect();
@@ -39,7 +40,7 @@ class CallbackService
             return;
         }
 
-        $this->applyLogin($sso_options);
+        $this->applyLogin($options);
     }
 
     private function sanitizeObject(stdClass $userInfo): stdClass
@@ -64,13 +65,13 @@ class CallbackService
             302,
             'WP-' . Bootstrap::DOMAIN_TEXT . ':' . WP_CAMOO_SSO_VERSION
         );
-        die;
+        exit;
     }
 
     private function validateToken(TokenService $tokenService): bool
     {
         try {
-            return  $tokenService->validate();
+            return $tokenService->validate();
         } catch (Throwable $exception) {
             wp_die('Single Sign On failed!! Click here to go back to the home page: <a href="' . site_url() .
                 '">Home</a>');
@@ -82,7 +83,7 @@ class CallbackService
         return json_decode($userData);
     }
 
-    private function applyLogin(array $sso_options): void
+    private function applyLogin(array $options): void
     {
         $code = sanitize_text_field(wp_unslash($_GET['code']));
 
@@ -98,6 +99,11 @@ class CallbackService
         }
 
         $token = $tokenService->getToken();
+        $userType = $token->claims()->get('for');
+        if ($userType === self::LOGIN_USER_TYPE && empty($options['allow_login_account'])) {
+            wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to the home page: <a href="' . site_url() .
+                '">Home</a>');
+        }
 
         $roles = $token->headers()->get('roles');
         $userData = $token->claims()->get('ufo');
@@ -107,19 +113,19 @@ class CallbackService
         $isNew = false;
 
         if (!$userId && email_exists($userInfo->user_email) === false) {
-            $random_password = wp_generate_password(12, false);
-            $userId = wp_create_user($userInfo->user_login, $random_password, $userInfo->user_email);
+            $randomPassword = wp_generate_password(12, false);
+            $userId = wp_create_user($userInfo->user_login, $randomPassword, $userInfo->user_email);
             $isNew = $userId > 0;
             do_action('wpoc_user_created', $this->sanitizeObject($userInfo), 1);
         } else {
             do_action('wpoc_user_login', $this->sanitizeObject($userInfo), 1);
         }
-        $this->manageLoginCookie($userInfo, $roles, !empty($sso_options['sync_roles']), $isNew);
+        $this->manageLoginCookie($userInfo, $roles, !empty($options['sync_roles']), $isNew);
 
-        $user_redirect = $this->getUserRedirectUrl($sso_options);
+        $userRedirectUrl = $this->getUserRedirectUrl($options);
 
         if (is_user_logged_in()) {
-            wp_redirect($user_redirect);
+            wp_redirect($userRedirectUrl);
             exit;
         }
         wp_die('Single Sign On Login Failed.');
@@ -155,7 +161,8 @@ class CallbackService
         wp_set_auth_cookie($user->ID);
     }
 
-    private function getUserRedirectUrl(array $sso_options)
+    /** @return mixed|null */
+    private function getUserRedirectUrl(array $options)
     {
         $dashboardUrl = get_dashboard_url();
         $dashboardUrl = !Helper::getInstance()->isInternalDomain($dashboardUrl) ? $dashboardUrl :
@@ -163,8 +170,8 @@ class CallbackService
 
         $siteUrl = site_url();
         $site = !Helper::getInstance()->isInternalDomain($siteUrl) ? $siteUrl : site_url('', 'https');
-        $user_redirect_set = !empty($sso_options['redirect_to_dashboard']) ? $dashboardUrl : $site;
+        $userRedirectUrl = !empty($options['redirect_to_dashboard']) ? $dashboardUrl : $site;
 
-        return apply_filters('wpssoc_user_redirect_url', $user_redirect_set);
+        return apply_filters('wpssoc_user_redirect_url', $userRedirectUrl);
     }
 }

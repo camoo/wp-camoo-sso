@@ -17,11 +17,7 @@ final class Helper
 
     public function isInternalDomain(string $domain): bool
     {
-        return in_array(
-            $this->getDomain($domain),
-            self::INTERNAL_DOMAINS,
-            true
-        );
+        return in_array($this->getDomain($domain), self::INTERNAL_DOMAINS, true);
     }
 
     public function getDomain(string $url): string

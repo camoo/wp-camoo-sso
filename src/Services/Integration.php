@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WP_CAMOO\SSO\Services;
 
+use WP_CAMOO\SSO\Gateways\Option;
 use WP_Role;
 
 if (!defined('ABSPATH')) {
@@ -17,6 +18,8 @@ if (!defined('ABSPATH')) {
  */
 final class Integration
 {
+    private const AT_LEAST_VERSION = '6.1';
+
     public static function getInstance(): self
     {
         return new self();
@@ -24,18 +27,19 @@ final class Integration
 
     public function initialize(): void
     {
-        add_action('plugins_loaded', [$this, 'init_actions']);
+        add_action('plugins_loaded', [$this, 'initActions']);
         register_activation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [new Install(), 'install']);
         register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'deactivateCamooSso']);
     }
 
-    public function init_actions(): void
+    public function initActions(): void
     {
         add_filter('login_body_class', [$this, 'addClassBody']);
         add_action('wp_loaded', [$this, 'registerSsoFiles']);
         add_filter('login_headertext', [$this, 'wrapLoginFormStart']);
         add_action('login_enqueue_scripts', [$this, 'provideSsoStyle']);
         add_action('login_footer', [$this, 'wrapLoginFormEnd']);
+        add_action('login_init', [$this, 'disablePasswordLogin']);
     }
 
     public function deactivateCamooSso(): void
@@ -49,11 +53,17 @@ final class Integration
 
     public function wrapLoginFormEnd(): void
     {
+        if (!$this->isLoginPage()) {
+            return;
+        }
         echo '</div></div></div></section>';
     }
 
     public function provideSsoStyle(): void
     {
+        if (!$this->isLoginPage()) {
+            return;
+        }
         wp_enqueue_style(
             'camoo-sso',
             plugins_url('/assets/css/login.css', dirname(__DIR__))
@@ -62,6 +72,9 @@ final class Integration
 
     public function wrapLoginFormStart(): void
     {
+        if (!$this->isLoginPage()) {
+            return;
+        }
         echo '<section class="camoo-sso-header">
                 <img class="logo" src="' . WP_CAMOO_SSO_SITE . '/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
 	           </section>
@@ -88,5 +101,27 @@ final class Integration
         wp_register_style('camoo-sso-admin', plugins_url('/assets/css/admin.css', dirname(__DIR__)));
         wp_register_style('camoo-sso-jquery-ui', plugins_url('/assets/css/jquery-ui.css', dirname(__DIR__)));
         wp_register_script('camoo-sso-admin', plugins_url('/assets/js/admin.js', dirname(__DIR__)));
+    }
+
+    public function disablePasswordLogin(): void
+    {
+        $settings = get_option(Option::MAIN_SETTING_KEY);
+        $canUsernameAndPasswordLogin = $settings['disable_username_password_login'] ?? 0;
+        if (empty($canUsernameAndPasswordLogin)) {
+            return;
+        }
+
+        if (isset($_POST['log']) || isset($_POST['user_login'])) {
+            wp_die(__('There has been a critical error on this website.'), 'Login');
+        }
+    }
+
+    private function isLoginPage(): bool
+    {
+        if (!is_wp_version_compatible(self::AT_LEAST_VERSION)) {
+            return true;
+        }
+
+        return is_login();
     }
 }
