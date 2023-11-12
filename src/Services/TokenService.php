@@ -24,37 +24,28 @@ use WP_CAMOO\SSO\Lib\JwtEmptyInMemory;
 
 final class TokenService
 {
+    private const HELP_DASHBOARD = 'https://hpanel.camoo.hosting';
+
     private string $code;
 
-    private ?Token $token;
+    private ?Token $token = null;
 
-    public function __construct(string $code, ?Token $token = null)
+    public function __construct(string $code)
     {
         $this->code = $code;
-        $this->token = $token;
     }
 
     public static function getConfiguration(): Configuration
     {
         $oSigner = new Sha256();
-        $key = InMemory::file(dirname(plugin_dir_path(__FILE__), 2) . '/config/pub.pem');
+        $key = InMemory::file(self::getPublicKeyPath());
         $configuration = Configuration::forAsymmetricSigner(
             $oSigner,
             JwtEmptyInMemory::default(),
             $key,
         );
 
-        $constraint = new ConstraintCollection();
-        $signWith = new SignedWith($oSigner, $key);
-        $clock = new LooseValidAt(new SystemClock(new DateTimeZone('UTC')));
-        $constraint->add($signWith);
-        $constraint->add($clock);
-        $issuedBy = new IssuedBy(WP_CAMOO_SSO_SITE, 'https://hpanel.camoo.hosting');
-        $constraint->add($issuedBy);
-        $siteUrl = site_url();
-        $site = !Helper::getInstance()->isInternalDomain($siteUrl) ? $siteUrl : site_url('', 'https');
-        $constraint->add(new PermittedFor($site));
-        $configuration->setValidationConstraints($constraint);
+        $configuration->setValidationConstraints(self::getConstraints($oSigner, $key));
 
         return $configuration;
     }
@@ -62,12 +53,12 @@ final class TokenService
     public function validate(): bool
     {
         $config = self::getConfiguration();
-
-        $this->token = $config->parser()->parse($this->code);
-        assert($this->token instanceof UnencryptedToken);
-
-        $constraints = $config->validationConstraints();
         try {
+            $this->token = $config->parser()->parse($this->code);
+            assert($this->token instanceof UnencryptedToken);
+
+            $constraints = $config->validationConstraints();
+
             $isValid = $config->validator()->validate($this->token, ...$constraints);
         } catch (RequiredConstraintsViolated $exception) {
             $isValid = false;
@@ -79,5 +70,28 @@ final class TokenService
     public function getToken(): ?Token
     {
         return $this->token;
+    }
+
+    private static function getPermittedSiteUrl(): string
+    {
+        $siteUrl = site_url();
+
+        return Helper::getInstance()->isInternalDomain($siteUrl) ? site_url('', 'https') : $siteUrl;
+    }
+
+    private static function getConstraints(Sha256 $oSigner, InMemory $key): ConstraintCollection
+    {
+        $constraint = new ConstraintCollection();
+        $constraint->add(new SignedWith($oSigner, $key));
+        $constraint->add(new LooseValidAt(new SystemClock(new DateTimeZone('UTC'))));
+        $constraint->add(new IssuedBy(WP_CAMOO_SSO_SITE, self::HELP_DASHBOARD));
+        $constraint->add(new PermittedFor(self::getPermittedSiteUrl()));
+
+        return $constraint;
+    }
+
+    private static function getPublicKeyPath(): string
+    {
+        return dirname(plugin_dir_path(__FILE__), 2) . '/config/pub.pem';
     }
 }
