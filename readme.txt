@@ -48,8 +48,10 @@ N/A
 
 = 1.5.2: Nov 12, 2023 =
 * Tweak: flush rewrite rule now only on plugin activation or deactivation
+* Tweak: Better handle login_form_login check when password connection is disabled
 * Tweak: TokenService unnecessary token injection removed
 * Tweak: Helper improved by returning the singleton instance of the class.
+* Tweak: General code improvements
 
 = 1.5.1: Jul 01, 2023 =
 * Tweak: replace deprecated InMemory::empty
