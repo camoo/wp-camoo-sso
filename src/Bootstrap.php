@@ -26,15 +26,15 @@ final class Bootstrap
 
     public function initialize(): void
     {
-        require_once dirname(plugin_dir_path(__FILE__)) . '/config/defines.php';
-        require_once dirname(plugin_dir_path(__FILE__)) . '/vendor/autoload.php';
+        $this->requireDependencies();
+
+        // Initialize services
         Integration::getInstance()->initialize();
         RewriteService::getInstance()->initialize();
         AdminController::getInstance()->initialize();
-        add_filter('all_plugins', [$this, 'modifyPluginDescription']);
-        add_action('login_form', [$this, 'addCamooSsoButton'], 10, 1);
-        add_shortcode('sso_button', [$this, 'generateSsoButton']);
-        add_action('init', [$this, 'loadTextDomain']);
+
+        // Register hooks
+        $this->registerHooks();
     }
 
     public function loadTextDomain(): void
@@ -78,14 +78,15 @@ final class Bootstrap
 
         echo sprintf(
             '<p style="text-align: center;text-transform: uppercase;position: relative;" class="sso-login-or"><span>' .
-                __('OR', 'camoo-sso') . '</span></p>
+            esc_html__('OR', 'camoo-sso') . '</span></p>
             <p style="padding-bottom: 1px;margin: 20px auto;text-align: center;">
-                <a style="color:#FFF; width:%s; text-align:center; margin-bottom:1em;" class="button button-primary button-large jwt-sso-button"
-                   href="%s">' . __('Login via Camoo.Hosting', 'camoo-sso') . '</a>
+                <a style="color:#FFF; width:%s; text-align:center; margin-bottom:1em;"
+                class="button button-primary button-large jwt-sso-button"
+                   href="%s">' . esc_html__('Login via Camoo.Hosting', 'camoo-sso') . '</a>
             </p>
             <div style="clear:both;"></div>',
             '100%',
-            esc_attr(site_url('?auth=sso'))
+            esc_url(site_url('?auth=sso'))
         );
     }
 
@@ -101,7 +102,7 @@ final class Bootstrap
 
         return wp_kses(
             '<a class="' . esc_attr($btnAttr['class']) .
-            '" href="' . site_url('?auth=sso') .
+            '" href="' . esc_url(site_url('?auth=sso')) .
             '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' .
             esc_attr($btnAttr['text']) . '</a>',
             [
@@ -113,5 +114,20 @@ final class Bootstrap
                 ],
             ]
         );
+    }
+
+    private function requireDependencies(): void
+    {
+        $baseDir = dirname(plugin_dir_path(__FILE__));
+        require_once $baseDir . '/config/defines.php';
+        require_once $baseDir . '/vendor/autoload.php';
+    }
+
+    private function registerHooks(): void
+    {
+        add_filter('all_plugins', [$this, 'modifyPluginDescription']);
+        add_action('login_form', [$this, 'addCamooSsoButton'], 10, 1);
+        add_shortcode('sso_button', [$this, 'generateSsoButton']);
+        add_action('init', [$this, 'loadTextDomain']);
     }
 }

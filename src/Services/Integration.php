@@ -7,12 +7,10 @@ namespace WP_CAMOO\SSO\Services;
 use WP_CAMOO\SSO\Gateways\Option;
 use WP_Role;
 
-if (!defined('ABSPATH')) {
-    exit;
-} // Exit if accessed directly
+defined('ABSPATH') || die('You are not allowed to call this script directly!');
 
 /**
- * Class Integration
+ * Handles the integration of the SSO functionality into WordPress.
  *
  * @author CamooSarl
  */
@@ -20,9 +18,20 @@ final class Integration
 {
     private const AT_LEAST_VERSION = '6.1';
 
+    private static ?self $instance = null;
+
+    /** Class should only use static getInstance */
+    private function __construct()
+    {
+    }
+
     public static function getInstance(): self
     {
-        return new self();
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     public function initialize(): void
@@ -44,11 +53,8 @@ final class Integration
 
     public function deactivateCamooSso(): void
     {
-        $role = get_role('administrator');
-        if ($role instanceof WP_Role) {
-            $role->remove_cap('camoo_sso');
-        }
-        flush_rewrite_rules();
+        $this->removeAdminCapabilities();
+        RewriteService::flushRewriteRules();
     }
 
     public function wrapLoginFormEnd(): void
@@ -107,21 +113,27 @@ final class Integration
     {
         $settings = get_option(Option::MAIN_SETTING_KEY);
         $canUsernameAndPasswordLogin = $settings['disable_username_password_login'] ?? 0;
-        if (empty($canUsernameAndPasswordLogin)) {
+        if (empty($canUsernameAndPasswordLogin) || !$this->isLoginPage()) {
             return;
         }
 
-        if (isset($_POST['log']) || isset($_POST['user_login'])) {
-            wp_die(__('There has been a critical error on this website.'), 'Login');
+        add_action('login_form_login', function () {
+            if (isset($_POST['log']) || isset($_POST['user_login'])) {
+                wp_die(__('There has been a critical error on this website.'), 'Login');
+            }
+        });
+    }
+
+    private function removeAdminCapabilities(): void
+    {
+        $role = get_role('administrator');
+        if ($role instanceof WP_Role) {
+            $role->remove_cap('camoo_sso');
         }
     }
 
     private function isLoginPage(): bool
     {
-        if (!is_wp_version_compatible(self::AT_LEAST_VERSION)) {
-            return true;
-        }
-
-        return is_login();
+        return !is_wp_version_compatible(self::AT_LEAST_VERSION) || is_login();
     }
 }
