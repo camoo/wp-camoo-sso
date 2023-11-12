@@ -16,6 +16,8 @@ final class AdminController
 
     private string $optionName = Option::MAIN_SETTING_KEY;
 
+    private static ?self $instance = null;
+
     public function __construct(?Option $option = null)
     {
         $this->option = $option ?? new Option();
@@ -23,18 +25,22 @@ final class AdminController
 
     public static function getInstance(): self
     {
-        return new self();
+
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     public function initialize(): void
     {
-        add_action('admin_init', [new self(), 'initAdmin']);
-        add_action('admin_menu', [new self(), 'addPage']);
+        add_action('admin_init', [$this, 'initAdmin']);
+        add_action('admin_menu', [$this, 'addPage']);
     }
 
     public function initAdmin(): void
     {
-        register_setting(Option::MAIN_SETTING_KEY, $this->optionName, [$this, 'validate']);
+        register_setting($this->optionName, $this->optionName, [$this, 'validate']);
     }
 
     public function addPage(): void
@@ -47,10 +53,7 @@ final class AdminController
             __('Single Sign On', 'camoo-sso'),
             'manage_options',
             Option::MAIN_SETTING_KEY,
-            [
-                $this,
-                'doPageOptions',
-            ]
+            [$this, 'doPageOptions']
         );
     }
 
@@ -164,10 +167,25 @@ final class AdminController
 
     public function validate(array $input): array
     {
-        $input['sync_roles'] = isset($input['sync_roles']) ? esc_attr($input['sync_roles']) : 0;
-        $input['show_sso_button_login_page'] = isset($input['show_sso_button_login_page']) ?
-            esc_attr($input['show_sso_button_login_page']) : 0;
+        $validatedInput = [];
 
-        return $input;
+        // List of all expected checkbox options
+        $checkboxOptions = [
+            'sync_roles',
+            'show_sso_button_login_page',
+            'redirect_to_dashboard',
+            'allow_login_account',
+            'disable_username_password_login'
+        ];
+
+        // Iterate over each checkbox option
+        foreach ($checkboxOptions as $option) {
+            // Check if the checkbox is set in the input and is equal to '1'
+            $validatedInput[$option] = isset($input[$option]) && $input[$option] === '1' ? 1 : 0;
+        }
+
+        // Add more validation for other types of input here if necessary
+
+        return $validatedInput;
     }
 }
