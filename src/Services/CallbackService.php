@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WP_CAMOO\SSO\Services;
 
+use Lcobucci\JWT\Token;
 use stdClass;
 use Throwable;
 use WP_CAMOO\SSO\Bootstrap;
@@ -17,6 +18,8 @@ class CallbackService
 {
     private const LOGIN_USER_TYPE = 'l';
 
+    private const SITE_URL_LINK = '<a href="%s">Home</a>';
+
     private ?Option $options;
 
     public function __construct(?Option $options = null)
@@ -27,7 +30,7 @@ class CallbackService
     public function __invoke(): void
     {
         if (is_user_logged_in()) {
-            wp_safe_redirect(home_url());
+            $this->redirect(home_url());
 
             return;
         }
@@ -41,6 +44,17 @@ class CallbackService
         }
 
         $this->applyLogin($options);
+    }
+
+    private function redirect(string $url): void
+    {
+        wp_safe_redirect($url);
+        exit;
+    }
+
+    private function sanitizeCode(string $code): string
+    {
+        return sanitize_text_field(wp_unslash($code));
     }
 
     private function sanitizeObject(stdClass $userInfo): stdClass
@@ -73,8 +87,10 @@ class CallbackService
         try {
             return $tokenService->validate();
         } catch (Throwable $exception) {
-            wp_die('Single Sign On failed!! Click here to go back to the home page: <a href="' . site_url() .
-                '">Home</a>');
+            wp_die(
+                'Single Sign On failed!! Click here to go back to the home page: ' .
+                sprintf(self::SITE_URL_LINK, site_url())
+            );
         }
     }
 
@@ -83,26 +99,12 @@ class CallbackService
         return json_decode($userData);
     }
 
-    private function applyLogin(array $options): void
+    private function processToken(Token $token, array $options): void
     {
-        $code = sanitize_text_field(wp_unslash($_GET['code']));
-
-        if (empty($code)) {
-            return;
-        }
-
-        $tokenService = new TokenService($code);
-
-        if (!$this->validateToken($tokenService)) {
-            wp_die('Single Sign On failed! Click here to go back to the home page: <a href="' . site_url() .
-                '">Home</a>');
-        }
-
-        $token = $tokenService->getToken();
         $userType = $token->claims()->get('for');
         if ($userType === self::LOGIN_USER_TYPE && empty($options['allow_login_account'])) {
-            wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to the home page: <a href="' . site_url() .
-                '">Home</a>');
+            wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to ' .
+                'the home page: ' . sprintf(self::SITE_URL_LINK, site_url()));
         }
 
         $roles = $token->headers()->get('roles');
@@ -129,6 +131,27 @@ class CallbackService
             exit;
         }
         wp_die('Single Sign On Login Failed.');
+    }
+
+    private function applyLogin(array $options): void
+    {
+        $code = $this->sanitizeCode($_GET['code'] ?? '');
+
+        if (empty($code)) {
+            return;
+        }
+
+        $tokenService = new TokenService($code);
+
+        if (!$this->validateToken($tokenService)) {
+            wp_die(
+                'Single Sign On failed! Click here to go back to the home page: ' .
+                sprintf(self::SITE_URL_LINK, site_url())
+            );
+        }
+
+        $token = $tokenService->getToken();
+        $this->processToken($token, $options);
     }
 
     private function manageLoginCookie(stdClass $userInfo, array $roles, bool $syncRoles, bool $isNew = false): void
