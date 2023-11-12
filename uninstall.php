@@ -11,6 +11,9 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
+use WP_CAMOO\SSO\Services\RewriteService;
+
 defined('WP_UNINSTALL_PLUGIN') || exit;
 
 delete_option('wp_camoo_sso_options');
@@ -20,3 +23,4 @@ $role = get_role('administrator');
 if ($role instanceof WP_Role) {
     $role->remove_cap('camoo_sso');
 }
+RewriteService::flushRewriteRules();
