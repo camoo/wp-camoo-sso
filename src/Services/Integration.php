@@ -20,9 +20,12 @@ final class Integration
 
     private static ?self $instance = null;
 
+    private string $pluginPath;
+
     /** Class should only use static getInstance */
     private function __construct()
     {
+        $this->pluginPath = WP_CAMOO_SSO_DIR . 'camoo-sso.php';
     }
 
     public static function getInstance(): self
@@ -37,8 +40,26 @@ final class Integration
     public function initialize(): void
     {
         add_action('plugins_loaded', [$this, 'initActions']);
-        register_activation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [new Install(), 'install']);
-        register_deactivation_hook(WP_CAMOO_SSO_DIR . 'camoo-sso.php', [$this, 'deactivateCamooSso']);
+        register_activation_hook($this->pluginPath, [new Install(), 'install']);
+        register_deactivation_hook($this->pluginPath, [$this, 'deactivateCamooSso']);
+        add_filter(
+            'plugin_action_links_' . plugin_basename($this->pluginPath),
+            [$this, 'onPluginActionLinks'],
+            1,
+            1
+        );
+    }
+
+    public function onPluginActionLinks($links)
+    {
+        $link = sprintf(
+            '<a href="%s">%s</a>',
+            admin_url('options-general.php?page=wp_camoo_sso_options'),
+            __( 'Settings' )
+        );
+        array_unshift($links, $link);
+
+        return $links;
     }
 
     public function initActions(): void

@@ -42,7 +42,7 @@ final class ConstraintCollection implements Constraint, IteratorAggregate
     }
 
     /**
-     * Asserts all constraints against a given token.
+     * Assert all constraints against a given token.
      *
      * @param Token $token JWT Token to be validated
      *

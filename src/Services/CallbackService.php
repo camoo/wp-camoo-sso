@@ -87,11 +87,10 @@ class CallbackService
         try {
             return $tokenService->validate();
         } catch (Throwable $exception) {
-            wp_die(
-                'Single Sign On failed!! Click here to go back to the home page: ' .
-                sprintf(self::SITE_URL_LINK, site_url())
-            );
+            $this->handleLoginFailure();
         }
+
+        return false;
     }
 
     private function getUserInfo(string $userData): stdClass
@@ -144,14 +143,19 @@ class CallbackService
         $tokenService = new TokenService($code);
 
         if (!$this->validateToken($tokenService)) {
-            wp_die(
-                'Single Sign On failed! Click here to go back to the home page: ' .
-                sprintf(self::SITE_URL_LINK, site_url())
-            );
+            $this->handleLoginFailure();
         }
 
         $token = $tokenService->getToken();
         $this->processToken($token, $options);
+    }
+
+    private function handleLoginFailure(): void
+    {
+        wp_die(
+            'Single Sign On failed! Click here to go back to the home page: ' .
+            sprintf(self::SITE_URL_LINK, site_url())
+        );
     }
 
     private function manageLoginCookie(stdClass $userInfo, array $roles, bool $syncRoles, bool $isNew = false): void

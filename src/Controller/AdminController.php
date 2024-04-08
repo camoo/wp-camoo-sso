@@ -29,6 +29,7 @@ final class AdminController
         if (self::$instance === null) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 
@@ -79,7 +80,7 @@ final class AdminController
             <div style="' . 'padding:12px;' . '">
                 <p>
                     When activated, this plugin adds a Single Sign On button to the login screen.
-                    <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme simply link to
+                    <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme link to
                     <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
                 </p>
             </div>
@@ -175,7 +176,7 @@ final class AdminController
             'show_sso_button_login_page',
             'redirect_to_dashboard',
             'allow_login_account',
-            'disable_username_password_login'
+            'disable_username_password_login',
         ];
 
         // Iterate over each checkbox option
