@@ -103,7 +103,7 @@ class CallbackService
         $userType = $token->claims()->get('for');
         if ($userType === self::LOGIN_USER_TYPE && empty($options['allow_login_account'])) {
             wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to ' .
-                'the home page: ' . sprintf(self::SITE_URL_LINK, site_url()));
+                'the home page: ' . sprintf(esc_attr(self::SITE_URL_LINK), esc_attr(site_url())));
         }
 
         $roles = $token->headers()->get('roles');
@@ -154,7 +154,7 @@ class CallbackService
     {
         wp_die(
             'Single Sign On failed! Click here to go back to the home page: ' .
-            sprintf(self::SITE_URL_LINK, site_url())
+            sprintf(esc_attr(self::SITE_URL_LINK), esc_attr(site_url()))
         );
     }
 

@@ -51,11 +51,11 @@ final class Bootstrap
         if (isset($plugins[self::PLUGIN_MAIN_FILE])) {
             $plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
                 sprintf(
-                    __(
-                        'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without password. You will no longer need to remember any password or to save systematically password on your browser. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
+                    esc_attr__(
+                        'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without a password. You will no longer need to remember any password or to save systematic password in your browser. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
                         'camoo-sso'
                     ),
-                    WP_CAMOO_SSO_SITE . '/wordpress-hosting'
+                    esc_attr(WP_CAMOO_SSO_SITE . '/wordpress-hosting')
                 ),
                 [
                     'a' => [
