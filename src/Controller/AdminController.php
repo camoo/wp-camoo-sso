@@ -81,7 +81,7 @@ final class AdminController
                 <p>
                     When activated, this plugin adds a Single Sign On button to the login screen.
                     <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme link to
-                    <strong><?php esc_html(site_url('?auth=sso')); ?></strong> if the user is not logged in
+                    <strong><?php echo esc_html(site_url('?auth=sso')); ?></strong> if the user is not logged in
                 </p>
             </div>
         </div>
