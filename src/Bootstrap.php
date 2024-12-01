@@ -37,6 +37,7 @@ final class Bootstrap
         $this->registerHooks();
     }
 
+    /** Load plugin text domain for translations. */
     public function loadTextDomain(): void
     {
         load_plugin_textdomain(
@@ -46,6 +47,13 @@ final class Bootstrap
         );
     }
 
+    /**
+     * Modify the plugin description in the WordPress plugin list.
+     *
+     * @param array<string, mixed> $plugins The array of all plugins.
+     *
+     * @return array<string, mixed> Modified plugin array.
+     */
     public function modifyPluginDescription(array $plugins): array
     {
         if (isset($plugins[self::PLUGIN_MAIN_FILE])) {
@@ -69,6 +77,7 @@ final class Bootstrap
         return $plugins;
     }
 
+    /** Add the Camoo SSO button to the login form. */
     public function addCamooSsoButton(): void
     {
         $options = get_option(Option::MAIN_SETTING_KEY);
@@ -90,6 +99,13 @@ final class Bootstrap
         );
     }
 
+    /**
+     * Generate an SSO button shortcode.
+     *
+     * @param array<string, mixed> $attributes Attributes for the button.
+     *
+     * @return string HTML for the button.
+     */
     public function generateSsoButton(array $attributes): string
     {
         $btnAttr = shortcode_atts([
@@ -101,10 +117,14 @@ final class Bootstrap
         ], $attributes);
 
         return wp_kses(
-            '<a class="' . esc_attr($btnAttr['class']) .
-            '" href="' . esc_url(site_url('?auth=sso')) .
-            '" title="' . esc_attr($btnAttr['title']) . '" target="' . esc_attr($btnAttr['target']) . '">' .
-            esc_attr($btnAttr['text']) . '</a>',
+            sprintf(
+                '<a class="%s" href="%s" title="%s" target="%s">%s</a>',
+                esc_attr($btnAttr['class']),
+                esc_url(site_url('?auth=sso')),
+                esc_attr($btnAttr['title']),
+                esc_attr($btnAttr['target']),
+                esc_html($btnAttr['text'])
+            ),
             [
                 'a' => [
                     'href' => true,
@@ -119,8 +139,20 @@ final class Bootstrap
     private function requireDependencies(): void
     {
         $baseDir = dirname(plugin_dir_path(__FILE__));
-        require_once $baseDir . '/config/defines.php';
-        require_once $baseDir . '/vendor/autoload.php';
+        if (!file_exists($baseDir)) {
+            return;
+        }
+
+        $dependencies = [
+            $baseDir . '/vendor/autoload.php',
+            $baseDir . '/config/defines.php',
+        ];
+
+        foreach ($dependencies as $file) {
+            if (file_exists($file)) {
+                require_once $file;
+            }
+        }
     }
 
     private function registerHooks(): void

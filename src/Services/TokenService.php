@@ -18,6 +18,7 @@ use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
+use WP_CAMOO\SSO\Exception\TokenException;
 use WP_CAMOO\SSO\Lib\ConstraintCollection;
 use WP_CAMOO\SSO\Lib\Helper;
 use WP_CAMOO\SSO\Lib\JwtEmptyInMemory;
@@ -37,15 +38,20 @@ final class TokenService
 
     public static function getConfiguration(): Configuration
     {
-        $oSigner = new Sha256();
-        $key = InMemory::file(self::getPublicKeyPath());
+
+        $filename = self::getPublicKeyPath();
+        if (!file_exists($filename)) {
+            throw new TokenException('Public key not found');
+        }
+        $signer = new Sha256();
+        $key = InMemory::file($filename);
         $configuration = Configuration::forAsymmetricSigner(
-            $oSigner,
+            $signer,
             JwtEmptyInMemory::default(),
             $key,
         );
 
-        $configuration->setValidationConstraints(self::getConstraints($oSigner, $key));
+        $configuration->setValidationConstraints(self::getConstraints($signer, $key));
 
         return $configuration;
     }
@@ -79,10 +85,10 @@ final class TokenService
         return Helper::getInstance()->isInternalDomain($siteUrl) ? site_url('', 'https') : $siteUrl;
     }
 
-    private static function getConstraints(Sha256 $oSigner, InMemory $key): ConstraintCollection
+    private static function getConstraints(Sha256 $signer, InMemory $key): ConstraintCollection
     {
         $constraint = new ConstraintCollection();
-        $constraint->add(new SignedWith($oSigner, $key));
+        $constraint->add(new SignedWith($signer, $key));
         $constraint->add(new LooseValidAt(new SystemClock(new DateTimeZone('UTC'))));
         $constraint->add(new IssuedBy(WP_CAMOO_SSO_SITE, self::HELP_DASHBOARD));
         $constraint->add(new PermittedFor(self::getPermittedSiteUrl()));

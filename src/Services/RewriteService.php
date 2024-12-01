@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace WP_CAMOO\SSO\Services;
 
+use WP_Rewrite;
+
 defined('ABSPATH') or die('You are not allowed to call this script directly!');
 
 final class RewriteService
 {
+    private const QUERY_VAR = 'auth';
+
+    private const QUERY_VALUE = 'sso';
+
     private static ?self $instance = null;
 
     /** This class needs only static getInstance */
@@ -33,15 +39,21 @@ final class RewriteService
 
     public function createRewriteRules(array $rules): array
     {
+        /** @var WP_Rewrite $wp_rewrite */
         global $wp_rewrite;
         $newRule = ['auth/(.+)' => 'index.php?auth=' . $wp_rewrite->preg_index(1)];
 
         return $newRule + $rules;
     }
 
+    /**
+     * @param string[] $vars
+     *
+     * @return string[]
+     */
     public function addQueryVariables(array $vars): array
     {
-        $vars[] = 'auth';
+        $vars[] = self::QUERY_VAR;
 
         return $vars;
     }
@@ -49,7 +61,7 @@ final class RewriteService
     public function interceptRedirect(): void
     {
         global $wp_query;
-        if ($wp_query->get('auth') && $wp_query->get('auth') === 'sso') {
+        if ($wp_query->get(self::QUERY_VAR) && $wp_query->get(self::QUERY_VAR) === self::QUERY_VALUE) {
             $this->handleSSOCallback();
             exit;
         }
