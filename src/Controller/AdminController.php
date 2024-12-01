@@ -50,8 +50,8 @@ final class AdminController
             return;
         }
         add_options_page(
-            __('Single Sign On', 'camoo-sso'),
-            __('Single Sign On', 'camoo-sso'),
+            esc_html__('Single Sign On', 'camoo-sso'),
+            esc_html__('Single Sign On', 'camoo-sso'),
             'manage_options',
             Option::MAIN_SETTING_KEY,
             [$this, 'doPageOptions']
@@ -73,7 +73,7 @@ final class AdminController
 
         $this->adminHead(); ?>
         <div class="wrap">
-            <h2><?php echo __('Single Sign On Configuration', 'camoo-sso') ?></h2>
+            <h2><?php esc_html_e('Single Sign On Configuration', 'camoo-sso') ?></h2>
 
             <div class="notice notice-' . 'info' . ' is-dismissible"
             ">
@@ -81,75 +81,75 @@ final class AdminController
                 <p>
                     When activated, this plugin adds a Single Sign On button to the login screen.
                     <br/><strong>NOTE:</strong> If you wish to add a custom link anywhere in your theme link to
-                    <strong><?php esc_attr_e(site_url('?auth=sso')); ?></strong> if the user is not logged in
+                    <strong><?php echo esc_html(site_url('?auth=sso')); ?></strong> if the user is not logged in
                 </p>
             </div>
         </div>
 
         <br/>
         <div class="camoo-sso-settings-table">
-            <h3 id="camoo-sso-configuration"><?php echo __('Camoo.Hosting SSO Settings', 'camoo-sso') ?></h3>
+            <h3 id="camoo-sso-configuration"><?php esc_html_e('Camoo.Hosting SSO Settings', 'camoo-sso') ?></h3>
             <div class="camoo-sso-options-table">
                 <form method="post" action="options.php">
                     <?php settings_fields(Option::MAIN_SETTING_KEY); ?>
                     <table class="form-table">
 
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Redirect to dashboard after login', 'camoo-sso') ?></th>
+                            <th scope="row"><?php  esc_html_e('Redirect to dashboard after login', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->optionName); ?>[redirect_to_dashboard]"
                                            value="1" <?php echo !empty($options['redirect_to_dashboard']) &&
-                                    $options['redirect_to_dashboard'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                    $options['redirect_to_dashboard'] == 1 ? esc_attr(self::INPUT_CHECKED) : ''; ?> />
                                 </label>
                             </td>
                         </tr>
 
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Sync roles with Camoo', 'camoo-sso') ?></th>
+                            <th scope="row"><?php esc_html_e('Sync roles with Camoo', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->optionName); ?>[sync_roles]"
                                            value="1" <?php echo !empty($options['sync_roles']) &&
-                                    $options['sync_roles'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                    $options['sync_roles'] == 1 ? esc_attr(self::INPUT_CHECKED) : ''; ?> />
                                 </label>
                             </td>
                         </tr>
 
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Show SSO button on login page', 'camoo-sso') ?></th>
+                            <th scope="row"><?php esc_html_e('Show SSO button on login page', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->optionName); ?>[show_sso_button_login_page]"
                                            value="1" <?php echo !empty($options['show_sso_button_login_page']) &&
-                                    $options['show_sso_button_login_page'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                    $options['show_sso_button_login_page'] == 1 ? esc_attr(self::INPUT_CHECKED) : ''; ?> />
                                 </label>
                             </td>
                         </tr>
                         <tr class="td-camoo-sso-options">
                             <th scope="row">
-                                <?php echo __('Allow login accounts from your main account', 'camoo-sso') ?>
+                                <?php esc_html_e('Allow login accounts from your main account', 'camoo-sso') ?>
                             </th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->optionName); ?>[allow_login_account]"
                                            value="1" <?php echo !empty($options['allow_login_account']) &&
-                                    $options['allow_login_account'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                    $options['allow_login_account'] == 1 ? esc_attr(self::INPUT_CHECKED) : ''; ?> />
                                 </label>
                             </td>
                         </tr>
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php echo __('Disable username and password login', 'camoo-sso') ?></th>
+                            <th scope="row"><?php esc_html_e('Disable username and password login', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"
                                            name="<?php echo esc_html($this->optionName); ?>[disable_username_password_login]"
                                            value="1" <?php echo !empty($options['disable_username_password_login']) &&
-                                    $options['disable_username_password_login'] == 1 ? self::INPUT_CHECKED : ''; ?> />
+                                    $options['disable_username_password_login'] == 1 ? esc_attr(self::INPUT_CHECKED) : ''; ?> />
                                 </label>
                             </td>
                         </tr>
@@ -157,7 +157,7 @@ final class AdminController
                     </table>
 
                     <p class="submit">
-                        <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/>
+                        <input type="submit" class="button-primary" value="<?php esc_html_e('Save Changes') ?>"/>
                     </p>
                 </form>
             </div>

@@ -103,7 +103,7 @@ final class Integration
             return;
         }
         echo '<section class="camoo-sso-header">
-                <img class="logo" src="' . WP_CAMOO_SSO_SITE . '/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
+                <img class="logo" src="' . esc_attr(WP_CAMOO_SSO_SITE) . '/img/logos/logocamoo-03.png" alt="Camoo.Hosting">
 	           </section>
 	           <section class="assistant-card-container">
 		            <div class="assistant-card card-login">
@@ -140,7 +140,7 @@ final class Integration
 
         add_action('login_form_login', function () {
             if (isset($_POST['log']) || isset($_POST['user_login'])) {
-                wp_die(__('There has been a critical error on this website.'), 'Login');
+                wp_die(esc_attr__('There has been a critical error on this website.', 'camoo-sso'), 'Login');
             }
         });
     }

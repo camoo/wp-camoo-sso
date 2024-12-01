@@ -98,12 +98,22 @@ class CallbackService
         return json_decode($userData);
     }
 
+    /** @param array<string,mixed> $options */
     private function processToken(Token $token, array $options): void
     {
         $userType = $token->claims()->get('for');
+
+        // Handle user type validation
         if ($userType === self::LOGIN_USER_TYPE && empty($options['allow_login_account'])) {
-            wp_die('You are not allowed to log in to this site via Single Sign On! Click here to go back to ' .
-                'the home page: ' . sprintf(self::SITE_URL_LINK, site_url()));
+            wp_die(
+                wp_kses(
+                    sprintf(
+                        'You are not allowed to log in to this site via Single Sign On! Click here to go back to the home page: %s',
+                        sprintf(self::SITE_URL_LINK, esc_url(site_url()))
+                    ),
+                    ['a' => ['href' => true]]
+                )
+            );
         }
 
         $roles = $token->headers()->get('roles');
@@ -153,8 +163,17 @@ class CallbackService
     private function handleLoginFailure(): void
     {
         wp_die(
-            'Single Sign On failed! Click here to go back to the home page: ' .
-            sprintf(self::SITE_URL_LINK, site_url())
+            wp_kses(
+                sprintf(
+                    'Single Sign On failed! <a href="%s">Click here to go back to the home page</a>.',
+                    esc_url(site_url())
+                ),
+                [
+                    'a' => [
+                        'href' => true,
+                    ],
+                ]
+            )
         );
     }
 

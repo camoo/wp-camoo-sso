@@ -50,7 +50,7 @@ final class Helper
         $urlWithScheme = (strpos($url, '://') === false) ? 'http://' . $url : $url;
 
         // Extract the domain
-        $domain = parse_url($urlWithScheme, PHP_URL_HOST);
+        $domain = wp_parse_url($urlWithScheme, PHP_URL_HOST);
 
         // Validate the domain format
         if ($domain && preg_match('/[a-z\d][a-z\d\-]{0,63}\.[a-z]{2,6}(\.[a-z]{1,2})?$/i', $domain, $matches)) {
