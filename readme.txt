@@ -2,9 +2,9 @@
 Contributors: camoo
 Tags: Camoo.Hosting, CAMOO SSO Integration, Managed Hosting with SSO, Hébergement Web avec SSO
 Requires at least: 5.6
-Tested up to: 6.7.1
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,10 @@ All you need is just to [visit our hosting packages](https://www.camoo.hosting/w
 N/A
 
 == Changelog ==
+= 1.5.7: Dec 15, 2025 =
+* Tweak: Support for new wp version improvements
+* Fix: description displayed properly in the settings page
+* Fix: minor code improvements
 
 = 1.5.6: Dec 01, 2024 =
 * Tweak: TokenException added

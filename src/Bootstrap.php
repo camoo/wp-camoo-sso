@@ -26,7 +26,15 @@ final class Bootstrap
 
     public function initialize(): void
     {
+
         $this->requireDependencies();
+        add_action('init', function () {
+            if (!defined('WP_CAMOO_SSO_VERSION')) {
+                require_once ABSPATH . 'wp-admin/includes/plugin.php';
+                $pluginData = get_plugin_data(WP_CAMOO_SSO_DIR . 'camoo-sso.php');
+                define('WP_CAMOO_SSO_VERSION', $pluginData['Version']);
+            }
+        });
 
         // Initialize services
         Integration::getInstance()->initialize();
@@ -35,16 +43,6 @@ final class Bootstrap
 
         // Register hooks
         $this->registerHooks();
-    }
-
-    /** Load plugin text domain for translations. */
-    public function loadTextDomain(): void
-    {
-        load_plugin_textdomain(
-            self::DOMAIN_TEXT,
-            false,
-            dirname(plugin_basename(__DIR__)) . '/includes/languages'
-        );
     }
 
     /**
@@ -57,21 +55,33 @@ final class Bootstrap
     public function modifyPluginDescription(array $plugins): array
     {
         if (isset($plugins[self::PLUGIN_MAIN_FILE])) {
-            $plugins[Bootstrap::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
-                sprintf(
-                    esc_attr__(
-                        'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without a password. You will no longer need to remember any password or to save systematic password in your browser. Check our <a target="_blank" href="%s">Managed WordPress packages</a> out for more.',
+            if (is_admin()) {
+                $url = esc_url(WP_CAMOO_SSO_SITE . '/wordpress-hosting');
+
+                $text = sprintf(
+                    __(
+                        'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without a password. You will no longer need to remember any password or to save systematic password in your browser. Check our <a target="_blank" href="%s" rel="noopener noreferrer">Managed WordPress packages</a> out for more.',
                         'camoo-sso'
                     ),
-                    esc_attr(WP_CAMOO_SSO_SITE . '/wordpress-hosting')
-                ),
-                [
-                    'a' => [
-                        'href' => true,
-                        'target' => true,
-                    ],
-                ]
-            );
+                    $url
+                );
+
+                $plugins[self::PLUGIN_MAIN_FILE]['Description'] = wp_kses(
+                    $text,
+                    [
+                        'a' => [
+                            'href' => true,
+                            'target' => true,
+                            'rel' => true,
+                        ],
+                    ]
+                );
+            } else {
+                $plugins[self::PLUGIN_MAIN_FILE]['Description'] = esc_html__(
+                    'Camoo.Hosting Single Sign On for Managed WordPress site. This plugin allows you to log in to your website without a password. You will no longer need to remember any password or to save systematic password in your browser. Check our Managed WordPress packages out for more.',
+                    'camoo-sso'
+                );
+            }
         }
 
         return $plugins;
@@ -80,6 +90,7 @@ final class Bootstrap
     /** Add the Camoo SSO button to the login form. */
     public function addCamooSsoButton(): void
     {
+
         $options = get_option(Option::MAIN_SETTING_KEY);
         if (empty($options['show_sso_button_login_page'])) {
             return;
@@ -157,9 +168,16 @@ final class Bootstrap
 
     private function registerHooks(): void
     {
-        add_filter('all_plugins', [$this, 'modifyPluginDescription']);
-        add_action('login_form', [$this, 'addCamooSsoButton'], 10, 1);
+        // Load translations correctly
+        add_action('init', function () {
+
+            add_filter('all_plugins', [$this, 'modifyPluginDescription']);
+        });
+
+        // Safe: runs during login form rendering
+        add_action('login_form', [$this, 'addCamooSsoButton']);
+
+        // Safe: shortcode executes much later
         add_shortcode('sso_button', [$this, 'generateSsoButton']);
-        add_action('init', [$this, 'loadTextDomain']);
     }
 }
