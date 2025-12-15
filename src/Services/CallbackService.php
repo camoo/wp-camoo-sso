@@ -208,7 +208,7 @@ class CallbackService
     }
 
     /** @return mixed|null */
-    private function getUserRedirectUrl(array $options)
+    private function getUserRedirectUrl(array $options): mixed
     {
         $dashboardUrl = get_dashboard_url();
         $dashboardUrl = !Helper::getInstance()->isInternalDomain($dashboardUrl) ? $dashboardUrl :
@@ -218,6 +218,6 @@ class CallbackService
         $site = !Helper::getInstance()->isInternalDomain($siteUrl) ? $siteUrl : site_url('', 'https');
         $userRedirectUrl = !empty($options['redirect_to_dashboard']) ? $dashboardUrl : $site;
 
-        return apply_filters('wpssoc_user_redirect_url', $userRedirectUrl);
+        return apply_filters('camoo_sso_user_redirect_url', $userRedirectUrl);
     }
 }
