@@ -18,6 +18,8 @@ final class Integration
 {
     private const AT_LEAST_VERSION = '6.1';
 
+    private const CAPABILITY = 'camoo_sso';
+
     private static ?self $instance = null;
 
     private string $pluginPath;
@@ -55,7 +57,7 @@ final class Integration
         $link = sprintf(
             '<a href="%s">%s</a>',
             admin_url('options-general.php?page=wp_camoo_sso_options'),
-            __( 'Settings' )
+            __('Settings')
         );
         array_unshift($links, $link);
 
@@ -70,6 +72,19 @@ final class Integration
         add_action('login_enqueue_scripts', [$this, 'provideSsoStyle']);
         add_action('login_footer', [$this, 'wrapLoginFormEnd']);
         add_action('login_init', [$this, 'disablePasswordLogin']);
+        add_action('admin_init', [$this, 'ensureAdminCapability']);
+    }
+
+    public function ensureAdminCapability(): void
+    {
+        if (is_multisite() && is_network_admin()) {
+            return;
+        }
+
+        $role = get_role('administrator');
+        if ($role && !$role->has_cap(self::CAPABILITY)) {
+            $role->add_cap(self::CAPABILITY);
+        }
     }
 
     public function deactivateCamooSso(): void

@@ -4,7 +4,7 @@ Tags: Camoo.Hosting, CAMOO SSO Integration, Managed Hosting with SSO, Hébergeme
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.7
+Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,6 @@ Camoo.Hosting Single sign On for WordPress websites.
 Camoo.Hosting Single sign On for Managed WordPress sites,
 This plugin allows signing in Camoo.Hosting users via SSO to your managed WordPress without having to remember any password of your website.
 Please note that the user information and role mappings are updated each time the user logs in via SSO. If you do not want to sync the roles from your existing system to WordPress, you can disable the functionality via the settings page.
-
 
 == Installation ==
 
@@ -45,6 +44,9 @@ All you need is just to [visit our hosting packages](https://www.camoo.hosting/w
 N/A
 
 == Changelog ==
+= 1.5.8: Dec 31, 2025 =
+* Fix: Admin capability check improved
+
 = 1.5.7: Dec 15, 2025 =
 * Tweak: Support for new wp version improvements
 * Fix: description displayed properly in the settings page

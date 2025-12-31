@@ -46,7 +46,10 @@ final class AdminController
 
     public function addPage(): void
     {
-        if (!current_user_can('camoo_sso')) {
+        if (
+            !current_user_can('camoo_sso') &&
+            !current_user_can('manage_options')
+        ) {
             return;
         }
         add_options_page(
@@ -95,7 +98,7 @@ final class AdminController
                     <table class="form-table">
 
                         <tr class="td-camoo-sso-options">
-                            <th scope="row"><?php  esc_html_e('Redirect to dashboard after login', 'camoo-sso') ?></th>
+                            <th scope="row"><?php esc_html_e('Redirect to dashboard after login', 'camoo-sso') ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox"

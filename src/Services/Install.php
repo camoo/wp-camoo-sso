@@ -39,7 +39,6 @@ final class Install
     public function install(): void
     {
         $this->initializeOptions();
-        $this->addAdminCapabilities();
         RewriteService::flushRewriteRules();
         if (is_admin()) {
             $this->upgrade();
@@ -81,15 +80,5 @@ final class Install
             'allow_login_account' => 1,
         ];
         $this->option->update('wp_camoo_sso_options', $newSettings);
-    }
-
-    /** Add necessary capabilities to admin role. */
-    private function addAdminCapabilities(): void
-    {
-        $role = get_role('administrator');
-        if ($role === null) {
-            return;
-        }
-        $role->add_cap('camoo_sso');
     }
 }
